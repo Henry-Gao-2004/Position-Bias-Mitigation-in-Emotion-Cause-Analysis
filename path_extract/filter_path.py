@@ -10,7 +10,7 @@ import json
 
 stemmer = SnowballStemmer("english")
 
-path_data = open('').readlines()
+path_data = open('raw_paths.log').readlines()
 
 new_data = []
 path_num_list=[]
@@ -19,8 +19,8 @@ read_path = False
 path_num =0
 sen_num,doc_num = 0,0
 
-ch_words = open("./data/wordCh.txt").readlines()#wordCh
-en_words = open("./data/wordEn.txt").readlines()#wordEn
+ch_words = open("path_extract/data/words.txt", encoding='utf-8').readlines()#wordCh
+en_words = open("path_extract/data/word_translation.txt", encoding='utf-8').readlines()#wordEn
 en2ch_dict = {}
 for i in range(len(ch_words)):
     en2ch_dict[en_words[i].strip()] = ch_words[i].strip()

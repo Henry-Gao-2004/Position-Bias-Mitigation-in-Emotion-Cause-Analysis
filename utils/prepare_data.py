@@ -8,8 +8,8 @@ import numpy as np
 import pickle as pk
 from sklearn.metrics import precision_score, recall_score, f1_score
 import pdb
+import json
 
-path = '../data/'
 def load_w2v(embedding_dim, embedding_dim_pos, train_file_path, embedding_path):
     print('\nload embedding...')
 
@@ -179,3 +179,33 @@ def print_training_info(FLAGS):
         FLAGS.batch_size,  FLAGS.learning_rate, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.l2_reg))
     print('training_iter-{}, scope-{}\n'.format(FLAGS.training_iter, FLAGS.scope))
 
+
+if __name__ == "__main__":
+    # Example usage
+    embedding_dim = 300
+    embedding_dim_pos = 50
+    
+    word_irdx, embedding, embedding_pos = load_w2v(embedding_dim, embedding_dim_pos, "data/clause_keywords.csv", "data/w2v_200.txt")
+    y_p, y, x, sen_len, doc_len, word_distance, DGL, label_pos_arr,emo_pos_list = load_data("data/clause_keywords.csv", word_irdx, max_doc_len = 75, max_sen_len = 45, absolute_pos=False)
+    with open("data/x.txt", 'wb') as f:
+        pk.dump(x, f)
+    with open("data/y.txt", 'wb') as f:
+        pk.dump(y, f)
+    with open("data/sen_len.txt", 'wb') as f:
+        pk.dump(sen_len, f)
+    with open("data/doc_len.txt", 'wb') as f:
+        pk.dump(doc_len, f)
+    with open("data/word_distance.txt", 'wb') as f:
+        pk.dump(word_distance, f)
+    with open("data/DGL.txt", 'wb') as f:
+        pk.dump(DGL, f)
+    with open("data/label_pos_arr.txt", 'wb') as f:
+        pk.dump(label_pos_arr, f)
+    with open("data/emo_pos.txt", 'wb') as f:
+        pk.dump(emo_pos_list, f)
+    with open("data/embedding.txt", 'wb') as f:
+        pk.dump(embedding, f)
+    with open("data/embedding_pos.txt", 'wb') as f:
+        pk.dump(embedding_pos, f)
+    with open("data/word2idx.txt", 'w', encoding='utf-8') as f:
+        json.dump(word_irdx, f)

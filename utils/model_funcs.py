@@ -10,7 +10,7 @@ import pickle as pk
 from sklearn.metrics import precision_score, recall_score, f1_score
 from tensorflow.contrib.layers import xavier_initializer
 
-path = '../data/'
+path = 'data/'
 max_doc_len = 75
 max_sen_len = 45
 max_path_num = 10
@@ -28,13 +28,13 @@ def load_data(edge_type=None):
     #load embedding
     embedding = pk.load(open(path + 'embedding.txt', 'rb'))
     embedding_pos = pk.load(open(path + 'embedding_pos.txt', 'rb'))
-    with open(path+'word2idx.txt') as json_file: 
+    with open(path+'word2idx.txt', 'r', encoding='utf-8') as json_file: 
         word2idx = json.load(json_file)
     id2word = {}
     for word in word2idx.keys():
         id2word[word2idx[word]] = word
     #load paths extracted from conceptnet
-    path_data = pk.load(open(path + 'path_data.txt', 'rb'))
+    path_data = pk.load(open('path_data_1120_num15.txt', 'rb'))
     path_num_data = pk.load(open(path + 'path_num_data.txt', 'rb'))
     path_len_data = pk.load(open(path + 'path_len_data.txt', 'rb'))
     #construct the adjacent matrix

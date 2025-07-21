@@ -11,10 +11,11 @@ import time
 import timeit
 import numpy as np
 import csv
+import pickle5
 
 
 config = configparser.ConfigParser()
-config.read("../paths.cfg")
+config.read("paths.cfg")
 
 
 cpnet = None
@@ -48,7 +49,11 @@ def load_resources():
 def load_cpnet():
     global cpnet,concept2id, relation2id, id2relation, id2concept, cpnet_simple
     print("loading cpnet....")
-    cpnet = nx.read_gpickle(config["paths"]["conceptnet_en_graph"])
+    with open(config["paths"]["conceptnet_en_graph"], "rb") as f:
+        data = pickle5.load(f)
+    cpnet = nx.Graph(data)
+
+    # cpnet = nx.read_gpickle(config["paths"]["conceptnet_en_graph"])
     print("Done")
 
     cpnet_simple = nx.Graph()
@@ -177,11 +182,11 @@ if __name__ == '__main__':
     # print();print();print();print();print();
 
     sys.stdout = open('raw_paths.log', 'w')
-    keywords_file = open('/input_file/keywords_en.csv').readlines()#extracted keywords in english
-    ori_file = open("/input_file/clause_keywords.txt").readlines()
+    keywords_file = open('data/keywords_en.csv', encoding='utf-8').readlines()#extracted keywords in english
+    ori_file = open("data/clause_keywords.csv", encoding='utf-8').readlines()
 
-    ch_words = open("/words.txt").readlines()
-    en_words = open("word_translation.txt").readlines()
+    ch_words = open("path_extract/data/words.txt", encoding='utf-8').readlines()
+    en_words = open("path_extract/data/word_translation.txt", encoding='utf-8').readlines()
     ch_en_dict = {}
     for i in range(len(ch_words)):
         ch_en_dict[ch_words[i].strip()] = en_words[i].strip()

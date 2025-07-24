@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=knowledge_graph_training
-#SBATCH --output=output/output.out
-#SBATCH --mem=32G
+#SBATCH --output=output.out
+#SBATCH --mem=128G
 #SBATCH --gres=gpu:1
 
 source ~/.bashrc

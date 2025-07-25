@@ -20,6 +20,9 @@ from sklearn.metrics import precision_score, recall_score, f1_score
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 
+import GPUtil
+
+
 
 flags.DEFINE_string('train_dir','./data/','Directory for logs and checkpoints.')
 #>>>>>>>>>>>>>>>>>>>>> For models <<<<<<<<<<<<<<<<<<<<<<#
@@ -255,6 +258,7 @@ def train_adv(model=None):
                     raw_sentence = train_doc_data.copy()
                     '''Step2: warm up the discriminator'''
                     if this_global_step < FLAGS.dis_warm_up_step:
+                        GPUtil.showUtilization()
                         dis_loss, _,= sess.run([dis_loss_op, train_dis_op],feed_dict={
                             'discriminator/train_doc:0': train_doc_data,
                             'discriminator/train_sen_len:0': train_sen_len_data,
@@ -266,6 +270,7 @@ def train_adv(model=None):
                             'discriminator/keep_prob1:0':FLAGS.keep_prob1,
                             'discriminator/keep_prob2:0':FLAGS.keep_prob2,
                         })
+                        GPUtil.showUtilization()
                         '''Step3: warm up generator'''
                     elif this_global_step < FLAGS.gene_warm_up_step+FLAGS.dis_warm_up_step:
                         original_prob_data = sess.run(original_prob_op, feed_dict={

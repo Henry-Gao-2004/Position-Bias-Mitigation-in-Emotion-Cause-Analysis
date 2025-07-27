@@ -123,7 +123,7 @@ def train(model=None):
     print_training_info(FLAGS)
     tf_config = tf.ConfigProto()  
     tf_config.gpu_options.allow_growth = True
-    with tf.Session(tf_config) as sess:
+    with tf.Session(config=tf_config) as sess:
     # with tf.Session() as sess:
         kf, fold = KFold(n_splits=10), 1
         p_list, r_list, f1_list = [], [], []
@@ -219,7 +219,10 @@ def train_adv(model=None):
     p_list, r_list, f1_list=[],[],[]
     att_plist, attr_list,attf1_list=[],[],[]
     saver = tf.train.Saver(max_to_keep=1)
-    with tf.Session() as sess:
+    
+    tf_config = tf.ConfigProto()  
+    tf_config.gpu_options.allow_growth = True
+    with tf.Session(config=tf_config) as sess:
         tf.set_random_seed(FLAGS.random_seed)
         np.random.seed(FLAGS.random_seed)
         

@@ -172,7 +172,7 @@ def train(model=None):
 
 def train_adv(model=None):
     global_step = tf.Variable(0, trainable=False)
-    add_global = tf.assign_add(global_step, 1)
+    add_global = global_step.assign_add(1)
 
     word_id_mapping, word_embedding, pos_embedding = load_w2v(FLAGS.embedding_dim, FLAGS.embedding_dim_pos, FLAGS.train_file_path, FLAGS.w2v_file)
 

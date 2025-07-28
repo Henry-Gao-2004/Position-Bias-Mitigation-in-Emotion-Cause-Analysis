@@ -5,7 +5,7 @@
 #SBATCH --gres=gpu:1
 
 source ~/.bashrc
-conda activate ecause
+conda activate ecause2
 
 cd /home/hgao62/Position-Bias-Mitigation-in-Emotion-Cause-Analysis
 

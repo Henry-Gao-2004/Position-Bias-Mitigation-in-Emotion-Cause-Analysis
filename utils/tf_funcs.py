@@ -66,7 +66,7 @@ class Saver(object):
 
 
 def get_weight_varible(name, shape): #
-    with tf.variable_scope("dzx_varible", reuse=tf.AUTO_REUSE):
+    with tf.name_scope("dzx_varible", reuse=tf.AUTO_REUSE):
         return tf.get_variable(name, initializer=tf.random_uniform(shape, -0.01, 0.01))
 
 def tf_load_w2v(w2v_file, embedding_dim, embedding_type):

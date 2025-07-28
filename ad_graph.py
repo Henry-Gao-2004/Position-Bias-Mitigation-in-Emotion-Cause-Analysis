@@ -139,7 +139,7 @@ class peaModel(object):
             yield feed_list, len(index)
     
     def get_original_prob(self,word_embedding, pos_embedding):
-        with tf.variable_scope('original') as scope:
+        with tf.name_scope('original') as scope:
             x = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='ori_x')
             word_dis = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='ori_word_dis')
             DGL = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='ori_DGL')
@@ -159,7 +159,7 @@ class peaModel(object):
         return original_prob#
 
     def paedgl(self,global_step,word_embedding, pos_embedding):
-        with tf.variable_scope('paedgl') as scope:
+        with tf.name_scope('paedgl') as scope:
             #feed dict
             self.global_step = global_step
             train_doc = tf.placeholder(dtype=tf.int32, shape=[None, FLAGS.max_doc_len, FLAGS.max_sen_len],name="train_doc") #
@@ -209,7 +209,7 @@ class peaModel(object):
 
     #
     def train_discriminator(self,global_step,word_embedding, pos_embedding):
-        with tf.variable_scope('discriminator') as scope:
+        with tf.name_scope('discriminator') as scope:
             #feed dict
             self.global_step = global_step
             train_doc = tf.placeholder(dtype=tf.int32, shape=[None, FLAGS.max_doc_len, FLAGS.max_sen_len],name="train_doc") #
@@ -260,7 +260,7 @@ class peaModel(object):
         return self.train_sentence,self.train_sentence_len,self.train_label
 
     def train_generator(self,global_step,word_embedding, pos_embedding):
-        with tf.variable_scope('generator'):
+        with tf.name_scope('generator'):
             # self.initialize_train_dataset()
             self.global_step = global_step
 

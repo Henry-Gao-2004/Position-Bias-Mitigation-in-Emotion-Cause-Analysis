@@ -140,15 +140,15 @@ class peaModel(object):
     
     def get_original_prob(self,word_embedding, pos_embedding):
         with tf.name_scope('original') as scope:
-            x = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='ori_x')
-            word_dis = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='ori_word_dis')
-            DGL = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='ori_DGL')
-            sen_len = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len],name='ori_sen_len')
-            doc_len = tf.placeholder(tf.int32, [None],name='ori_doc_len')
-            keep_prob1 = tf.placeholder(tf.float32,name="ori_keep_prob1")
-            keep_prob2 = tf.placeholder(tf.float32,name="ori_keep_prob2")
-            y = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class],name='ori_label')
-            y_p = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102],name='ori_p_label')
+            x = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='ori_x')
+            word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='ori_word_dis')
+            DGL = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='ori_DGL')
+            sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len],name='ori_sen_len')
+            doc_len = tf.compat.v1.placeholder(tf.int32, [None],name='ori_doc_len')
+            keep_prob1 = tf.compat.v1.placeholder(tf.float32,name="ori_keep_prob1")
+            keep_prob2 = tf.compat.v1.placeholder(tf.float32,name="ori_keep_prob2")
+            y = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class],name='ori_label')
+            y_p = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102],name='ori_p_label')
 
             s_tr,pred_c_tr,w,b,w_p,b_p,pred_p = self.logits_extractor(word_embedding, pos_embedding, x, word_dis, DGL, sen_len, doc_len, keep_prob1, keep_prob2,RNN = biLSTM,scope_name="original")
             logits = pred_c_tr
@@ -162,17 +162,17 @@ class peaModel(object):
         with tf.name_scope('paedgl') as scope:
             #feed dict
             self.global_step = global_step
-            train_doc = tf.placeholder(dtype=tf.int32, shape=[None, FLAGS.max_doc_len, FLAGS.max_sen_len],name="train_doc") #
-            word_dis = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='train_word_dis')
-            DGL = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='train_DGL')
-            sen_len = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len],name='train_sen_len')
-            doc_len = tf.placeholder(tf.int32, [None],name='train_doc_len')
-            keep_prob1 = tf.placeholder(tf.float32,name="keep_prob1")
-            keep_prob2 = tf.placeholder(tf.float32,name="keep_prob2")
-            y = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class],name='train_label')
-            y_p = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102],name='train_p_label')
+            train_doc = tf.compat.v1.placeholder(dtype=tf.int32, shape=[None, FLAGS.max_doc_len, FLAGS.max_sen_len],name="train_doc") #
+            word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='train_word_dis')
+            DGL = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='train_DGL')
+            sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len],name='train_sen_len')
+            doc_len = tf.compat.v1.placeholder(tf.int32, [None],name='train_doc_len')
+            keep_prob1 = tf.compat.v1.placeholder(tf.float32,name="keep_prob1")
+            keep_prob2 = tf.compat.v1.placeholder(tf.float32,name="keep_prob2")
+            y = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class],name='train_label')
+            y_p = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102],name='train_p_label')
 
-            original_prob = tf.placeholder(dtype=tf.float32,shape=[None],name='original_prob')
+            original_prob = tf.compat.v1.placeholder(dtype=tf.float32,shape=[None],name='original_prob')
 
 
             '''for feature extraction code'''
@@ -212,17 +212,17 @@ class peaModel(object):
         with tf.name_scope('discriminator') as scope:
             #feed dict
             self.global_step = global_step
-            train_doc = tf.placeholder(dtype=tf.int32, shape=[None, FLAGS.max_doc_len, FLAGS.max_sen_len],name="train_doc") #
-            word_dis = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='train_word_dis')
-            DGL = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='train_DGL')
-            sen_len = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len],name='train_sen_len')
-            doc_len = tf.placeholder(tf.int32, [None],name='train_doc_len')
-            keep_prob1 = tf.placeholder(tf.float32,name="keep_prob1")
-            keep_prob2 = tf.placeholder(tf.float32,name="keep_prob2")
-            y = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class],name='train_label')
-            y_p = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102],name='train_p_label')
+            train_doc = tf.compat.v1.placeholder(dtype=tf.int32, shape=[None, FLAGS.max_doc_len, FLAGS.max_sen_len],name="train_doc") #
+            word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='train_word_dis')
+            DGL = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='train_DGL')
+            sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len],name='train_sen_len')
+            doc_len = tf.compat.v1.placeholder(tf.int32, [None],name='train_doc_len')
+            keep_prob1 = tf.compat.v1.placeholder(tf.float32,name="keep_prob1")
+            keep_prob2 = tf.compat.v1.placeholder(tf.float32,name="keep_prob2")
+            y = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class],name='train_label')
+            y_p = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102],name='train_p_label')
 
-            original_prob = tf.placeholder(dtype=tf.float32,shape=[None],name='original_prob')
+            original_prob = tf.compat.v1.placeholder(dtype=tf.float32,shape=[None],name='original_prob')
 
 
             '''for feature extraction code'''
@@ -264,21 +264,21 @@ class peaModel(object):
             # self.initialize_train_dataset()
             self.global_step = global_step
 
-            train_doc = tf.placeholder(dtype=tf.int32, shape=[None, FLAGS.max_doc_len, FLAGS.max_sen_len],name="train_doc") #
-            word_dis = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='train_word_dis')
-            DGL = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='train_DGL')
-            sen_len = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len],name='train_sen_len')
-            doc_len = tf.placeholder(tf.int32, [None],name='train_doc_len')
-            keep_prob1 = tf.placeholder(tf.float32,name="keep_prob1")
-            keep_prob2 = tf.placeholder(tf.float32,name="keep_prob2")
-            y = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class],name='train_label')
-            y_p = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102],name='train_p_label')
-            emotion_pos = tf.placeholder(tf.int32,[None],name="emotion_pos")
+            train_doc = tf.compat.v1.placeholder(dtype=tf.int32, shape=[None, FLAGS.max_doc_len, FLAGS.max_sen_len],name="train_doc") #
+            word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len],name='train_word_dis')
+            DGL = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len],name='train_DGL')
+            sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len],name='train_sen_len')
+            doc_len = tf.compat.v1.placeholder(tf.int32, [None],name='train_doc_len')
+            keep_prob1 = tf.compat.v1.placeholder(tf.float32,name="keep_prob1")
+            keep_prob2 = tf.compat.v1.placeholder(tf.float32,name="keep_prob2")
+            y = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class],name='train_label')
+            y_p = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102],name='train_p_label')
+            emotion_pos = tf.compat.v1.placeholder(tf.int32,[None],name="emotion_pos")
 
 
-            original_prob = tf.placeholder(dtype=tf.float32,shape=[None],name='original_prob')
+            original_prob = tf.compat.v1.placeholder(dtype=tf.float32,shape=[None],name='original_prob')
 
-            action_idx = tf.placeholder(dtype=tf.int32,shape=[None],name='action_idx')  #the 
+            action_idx = tf.compat.v1.placeholder(dtype=tf.int32,shape=[None],name='action_idx')  #the 
 
             '''for feature extraction code'''
             s_tr,pred_c_tr,w,b,w_p,b_p,pred_p = self.logits_extractor(word_embedding, pos_embedding, train_doc, word_dis, DGL, sen_len, doc_len, keep_prob1, keep_prob2, RNN = biLSTM, scope_name="gen") 
@@ -288,7 +288,7 @@ class peaModel(object):
 
             action_logits = one2many_attention(emotion_pos, tf.reshape(s_tr,[-1,FLAGS.max_doc_len,s_tr.shape[-1]])) #[?,doc_len]
 
-            reward_score = tf.placeholder(dtype=tf.float32, shape=[None],name="reward_score")
+            reward_score = tf.compat.v1.placeholder(dtype=tf.float32, shape=[None],name="reward_score")
 
             # action_matrix = tf.squeeze(tf.layers.dense(tf.reshape(s_tr,[-1,FLAGS.max_doc_len,s_tr.shape[-1]]),1),-1)
             # action_logits = tf.nn.softmax(action_matrix,-1)

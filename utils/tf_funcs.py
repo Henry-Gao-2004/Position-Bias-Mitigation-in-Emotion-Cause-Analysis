@@ -289,7 +289,7 @@ def softmax_by_length(inputs, length):
     '''
     inputs = tf.exp(tf.cast(inputs, tf.float32))
     inputs *= getmask(length, tf.shape(inputs)[2], tf.shape(inputs))
-    _sum = tf.reduce_sum(inputs, reduction_indices=2, keep_dims=True) + 1e-9
+    _sum = tf.reduce_sum(inputs, axis=2, keepdims=True) + 1e-9
     return inputs / _sum
 
 def senEncode_softmax(s_senEncode, w_varible, b_varible, n_feature, doc_len):

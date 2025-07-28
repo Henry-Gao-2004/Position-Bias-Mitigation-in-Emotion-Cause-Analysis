@@ -34,9 +34,11 @@ def paedgl_optimize(loss,global_step=None):
 def adam_optimize(loss,global_step=None):
     return layers_lib.adam_optimize(loss,global_step,FLAGS.learning_rate,FLAGS.max_grad_norm)
 
-def gene_adam_optimize(loss,global_step=None):
+def gene_adam_optimize(loss, global_step=None):
     optimizer = tf.keras.optimizers.Adam(learning_rate=FLAGS.generator_learning_rate, clipnorm=FLAGS.max_grad_norm)
-    train_op = optimizer.minimize(loss, var_list=tf.compat.v1.trainable_variables(), global_step=global_step)
+    trainable_vars = tf.compat.v1.trainable_variables()
+    gradients = optimizer.get_gradients(loss, trainable_vars)
+    train_op = optimizer.apply_gradients(zip(gradients, trainable_vars), global_step=global_step)
     return train_op
     
 def optimize(loss, global_step=None):

@@ -131,13 +131,8 @@ def LSTM_multigpu(inputs,length,n_hidden,scope):
     length shape:[batch_size]
     return shape:[batch_size, max_len, n_hidden*2]
     '''
-    outputs, state = tf.nn.dynamic_rnn(
-        cell=tf.contrib.rnn.LSTMCell(n_hidden),
-        inputs=inputs,
-        # sequence_length=length,
-        dtype=tf.float32,
-        scope=scope
-    )
+    lstm = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True)
+    outputs, _, _ = lstm(inputs, mask=tf.sequence_mask(length))
     
     max_len = tf.shape(inputs)[1]
     mask = getmask(length, max_len, [-1, max_len, 1])
@@ -149,14 +144,13 @@ def biLSTM_multigpu_last(inputs,length,n_hidden,scope):
     length shape:[batch_size]
     return shape:[batch_size, max_len, n_hidden*2]
     '''
-    outputs, state = tf.nn.bidirectional_dynamic_rnn(
-        cell_fw=tf.contrib.rnn.LSTMCell(n_hidden),
-        cell_bw=tf.contrib.rnn.LSTMCell(n_hidden),
-        inputs=inputs,
-        # sequence_length=length,
-        dtype=tf.float32,
-        scope=scope
-    )
+    lstm_fw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=False)
+    lstm_bw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=True)
+
+    outputs_fw, _, _ = lstm_fw(inputs, mask=tf.sequence_mask(length))
+    outputs_bw, _, _ = lstm_bw(inputs, mask=tf.sequence_mask(length))
+
+    outputs = (outputs_fw, outputs_bw)
 
     batch_size = tf.shape(inputs)[0]
     max_len = tf.shape(inputs)[1]
@@ -178,25 +172,19 @@ def biLSTM(inputs,length,n_hidden,scope):
     length shape:[batch_size]
     return shape:[batch_size, max_len, n_hidden*2]
     '''
-    outputs, state = tf.nn.bidirectional_dynamic_rnn(
-        cell_fw=tf.contrib.rnn.LSTMCell(n_hidden, reuse = tf.AUTO_REUSE),
-        cell_bw=tf.contrib.rnn.LSTMCell(n_hidden, reuse = tf.AUTO_REUSE),
-        inputs=inputs,
-        sequence_length=length,
-        dtype=tf.float32,
-        scope=scope
-    )
+    lstm_fw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=False)
+    lstm_bw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=True)
+
+    outputs_fw, _, _ = lstm_fw(inputs, mask=tf.sequence_mask(length))
+    outputs_bw, _, _ = lstm_bw(inputs, mask=tf.sequence_mask(length))
+
+    outputs = tf.concat([outputs_fw, outputs_bw], axis=-1)
     
     return tf.concat(outputs, 2)
 
 def LSTM(inputs,sequence_length,n_hidden,scope):
-    outputs, state = tf.nn.dynamic_rnn(
-        cell=tf.contrib.rnn.LSTMCell(n_hidden),
-        inputs=inputs,
-        sequence_length=sequence_length,
-        dtype=tf.float32,
-        scope=scope
-    )
+    lstm = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True)
+    outputs, state_h, state_c = lstm(inputs, mask=tf.sequence_mask(sequence_length))
     return outputs
 
 def att_avg(inputs, length):

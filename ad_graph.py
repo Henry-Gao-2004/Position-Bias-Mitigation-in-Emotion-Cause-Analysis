@@ -55,7 +55,7 @@ def one2many_attention(emotion_pos, clause_reps):
 
     scores = tf.squeeze(tf.matmul(emotion_tensor, clause_reps, transpose_b=True),1) #[?,75]
     pos_vec = tf.range(0,FLAGS.max_doc_len) #[?]
-    attention = tf.nn.softmax(scores, dim=2)
+    attention = tf.nn.softmax(scores, axis=1)
     return attention
 
 class peaModel(object):

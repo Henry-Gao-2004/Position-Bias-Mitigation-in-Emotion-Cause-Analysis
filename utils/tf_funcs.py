@@ -67,7 +67,7 @@ class Saver(object):
 
 def get_weight_varible(name, shape): #
     with tf.name_scope("dzx_varible"):
-        return tf.get_variable(name, initializer=tf.random_uniform(shape, -0.01, 0.01))
+        return tf.Variable(tf.random.uniform(shape, -0.01, 0.01), name=name)
 
 def tf_load_w2v(w2v_file, embedding_dim, embedding_type):
     print('\n\n>>>>>>>>>>>>>>>>>>>>MODEL INFO:\n\n## embedding parameters ##')

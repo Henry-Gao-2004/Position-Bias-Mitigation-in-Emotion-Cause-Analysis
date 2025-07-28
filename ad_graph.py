@@ -69,7 +69,7 @@ class peaModel(object):
             yield feed_list#, doc_len_data[index], y_data[index], y_p_data[index]
 
     def logits_extractor(self,word_embedding, pos_embedding, x, word_dis, DGL, sen_len, doc_len, keep_prob1, keep_prob2,RNN, scope_name):
-        with tf.variable_scope(scope_name) as scope: #TODO change the name_scope to variable_scope
+        with tf.name_scope(scope_name) as scope: # Changed from variable_scope to name_scope for TensorFlow 2.x compatibility
             x = tf.nn.embedding_lookup(word_embedding, x)
             inputs = tf.reshape(x, [-1, FLAGS.max_sen_len, FLAGS.embedding_dim])
             word_dis = tf.nn.embedding_lookup(pos_embedding, word_dis)

@@ -78,7 +78,7 @@ class peaModel(object):
             if FLAGS.use_position == 'PAE':
                 print('using PAE')
                 inputs = tf.concat([inputs, word_dis], axis=2)
-            inputs = tf.nn.dropout(inputs, keep_prob=keep_prob1)
+            inputs = tf.nn.dropout(inputs, rate=1 - keep_prob1)
             sen_len = tf.reshape(sen_len, [-1])
             with tf.name_scope('word_encode'):  #maybe
                 inputs = RNN(inputs, sen_len, n_hidden=FLAGS.n_hidden,scope="word_layer"+scope_name)
@@ -103,7 +103,7 @@ class peaModel(object):
 
             with tf.name_scope('softmax'):
                 s = tf.reshape(s, [-1, n_feature])
-                s = tf.nn.dropout(s, keep_prob=keep_prob2)
+                s = tf.nn.dropout(s, rate=1 - keep_prob2)
                 # postion prediction
                 w_p = get_weight_varible('position_w'+scope_name, [n_feature, 102])
                 b_p = get_weight_varible('position_b'+scope_name, [102])

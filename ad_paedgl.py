@@ -18,55 +18,57 @@ import os
 from utils.prepare_data import load_w2v, load_data, acc_prf, print_training_info
 from sklearn.metrics import precision_score, recall_score, f1_score
 
-flags = tf.app.flags
-FLAGS = flags.FLAGS
+import argparse
 
+parser = argparse.ArgumentParser()
 
-flags.DEFINE_string('train_dir','./data/','Directory for logs and checkpoints.')
+parser.add_argument('--train_dir', type=str, default='./data/', help='Directory for logs and checkpoints.')
 #>>>>>>>>>>>>>>>>>>>>> For models <<<<<<<<<<<<<<<<<<<<<<#
-tf.app.flags.DEFINE_string('model_type', 'peadgl', 'embedding file')
-tf.app.flags.DEFINE_string('mode', 'train_adv', 'embedding file')
+parser.add_argument('--model_type', type=str, default='peadgl', help='embedding file')
+parser.add_argument('--mode', type=str, default='train_adv', help='embedding file')
 # >>>>>>>>>>>>>>>>>>>> For peaModel <<<<<<<<<<<<<<<<<<<< #
 ## embedding parameters ##
-tf.app.flags.DEFINE_string('w2v_file', 'data/w2v_200.txt', 'embedding file')
-tf.app.flags.DEFINE_integer('embedding_dim', 200, 'dimension of word embedding')
-tf.app.flags.DEFINE_integer('embedding_dim_pos', 50, 'dimension of position embedding')
-tf.app.flags.DEFINE_string('pos_trainable', '', 'whether position embedding is trainable')
+parser.add_argument('--w2v_file', type=str, default='data/w2v_200.txt', help='embedding file')
+parser.add_argument('--embedding_dim', type=int, default=200, help='dimension of word embedding')
+parser.add_argument('--embedding_dim_pos', type=int, default=50, help='dimension of position embedding')
+parser.add_argument('--pos_trainable', type=str, default='', help='whether position embedding is trainable')
 ## input struct ##
-tf.app.flags.DEFINE_integer('max_sen_len', 30, 'max number of tokens per sentence')
-tf.app.flags.DEFINE_integer('max_doc_len', 75, 'max number of sentences per documents')
+parser.add_argument('--max_sen_len', type=int, default=30, help='max number of tokens per sentence')
+parser.add_argument('--max_doc_len', type=int, default=75, help='max number of sentences per documents')
 ## model struct ##
-tf.app.flags.DEFINE_integer('n_hidden', 100, 'number of hidden unit')
-tf.app.flags.DEFINE_integer('n_class', 2, 'number of distinct class')
-tf.app.flags.DEFINE_string('use_position', 'PAE', 'PAE or PEC' )
-tf.app.flags.DEFINE_string('use_DGL', 'use', 'whether use DGL')
-tf.app.flags.DEFINE_string('hierachy', '', 'whether use hierachy')
+parser.add_argument('--n_hidden', type=int, default=100, help='number of hidden unit')
+parser.add_argument('--n_class', type=int, default=2, help='number of distinct class')
+parser.add_argument('--use_position', type=str, default='PAE', help='PAE or PEC')
+parser.add_argument('--use_DGL', type=str, default='use', help='whether use DGL')
+parser.add_argument('--hierachy', type=str, default='', help='whether use hierachy')
 # >>>>>>>>>>>>>>>>>>>> For Data <<<<<<<<<<<<<<<<<<<< #
-tf.app.flags.DEFINE_string('train_file_path', './data/clause_keywords.csv', 'training file')
-tf.app.flags.DEFINE_string('log_file_name', 'PAEDGL.log', 'name of log file')
+parser.add_argument('--train_file_path', type=str, default='./data/clause_keywords.csv', help='training file')
+parser.add_argument('--log_file_name', type=str, default='PAEDGL.log', help='name of log file')
 # >>>>>>>>>>>>>>>>>>>> For Training <<<<<<<<<<<<<<<<<<<< #
-tf.app.flags.DEFINE_integer('training_iter', 20, 'number of train iter')
-tf.app.flags.DEFINE_string('scope', 'PAEDGL', 'RNN scope')
-tf.app.flags.DEFINE_integer('test_steps', 200, 'test at every step')
-tf.app.flags.DEFINE_integer('train_steps', 20, 'show statistics of training')
-tf.app.flags.DEFINE_integer("every", 1, "one sample generate 2 negative sample")  # number of batches negtive samples
+parser.add_argument('--training_iter', type=int, default=20, help='number of train iter')
+parser.add_argument('--scope', type=str, default='PAEDGL', help='RNN scope')
+parser.add_argument('--test_steps', type=int, default=200, help='test at every step')
+parser.add_argument('--train_steps', type=int, default=20, help='show statistics of training')
+parser.add_argument('--every', type=int, default=1, help='one sample generate 2 negative sample')  # number of batches negtive samples
 # not easy to tune 
-tf.app.flags.DEFINE_integer('batch_size', 32, 'number of samples per batch')
-tf.app.flags.DEFINE_float('learning_rate', 0.005, 'learning rate')
-tf.app.flags.DEFINE_float('keep_prob1', 0.5, 'word embedding dropout keep prob')
-tf.app.flags.DEFINE_float('keep_prob2', 1.0, 'softmax layer dropout keep prob')
-tf.app.flags.DEFINE_float('l2_reg', 0.00001, 'l2 regularization rate')
-tf.app.flags.DEFINE_float('lambda1', 0.1, 'rate for position prediction loss')
+parser.add_argument('--batch_size', type=int, default=32, help='number of samples per batch')
+parser.add_argument('--learning_rate', type=float, default=0.005, help='learning rate')
+parser.add_argument('--keep_prob1', type=float, default=0.5, help='word embedding dropout keep prob')
+parser.add_argument('--keep_prob2', type=float, default=1.0, help='softmax layer dropout keep prob')
+parser.add_argument('--l2_reg', type=float, default=0.00001, help='l2 regularization rate')
+parser.add_argument('--lambda1', type=float, default=0.1, help='rate for position prediction loss')
 
-tf.app.flags.DEFINE_integer('dis_warm_up_step', 50, 'discriminator warm up step')
-tf.app.flags.DEFINE_integer('gene_warm_up_step', 50, 'generator warm up step')
+parser.add_argument('--dis_warm_up_step', type=int, default=50, help='discriminator warm up step')
+parser.add_argument('--gene_warm_up_step', type=int, default=50, help='generator warm up step')
 
 #>>>>>>>>>>>>>>>>>>For generator <<<<<<<<<<<<<<<<<<<#
-tf.app.flags.DEFINE_float('generator_learning_rate', 0.001, 'rate for position prediction loss')
-tf.app.flags.DEFINE_float('max_grad_norm', 1.0,'Clip the global gradient norm to this value.')
+parser.add_argument('--generator_learning_rate', type=float, default=0.001, help='rate for position prediction loss')
+parser.add_argument('--max_grad_norm', type=float, default=1.0, help='Clip the global gradient norm to this value.')
 
-tf.app.flags.DEFINE_integer('random_seed', 29,'random_seed')
-tf.app.flags.DEFINE_integer('max_steps', 100000,'random_seed')
+parser.add_argument('--random_seed', type=int, default=29, help='random_seed')
+parser.add_argument('--max_steps', type=int, default=100000, help='random_seed')
+
+FLAGS, unparsed = parser.parse_known_args()
 
 """
 checkpoint_dir = FLAGS.train_dir,

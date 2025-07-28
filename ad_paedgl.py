@@ -95,15 +95,15 @@ def train(model=None):
 
     print('build model...')
     
-    x = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
-    word_dis = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
-    DGL = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len])
-    sen_len = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len])
-    doc_len = tf.placeholder(tf.int32, [None])
-    keep_prob1 = tf.placeholder(tf.float32)
-    keep_prob2 = tf.placeholder(tf.float32)
-    y = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.n_class])
-    y_p = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102])
+    x = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
+    word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
+    DGL = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len])
+    sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len])
+    doc_len = tf.compat.v1.placeholder(tf.int32, [None])
+    keep_prob1 = tf.compat.v1.placeholder(tf.float32)
+    keep_prob2 = tf.compat.v1.placeholder(tf.float32)
+    y = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.n_class])
+    y_p = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102])
     placeholders = [x, word_dis, DGL, sen_len, doc_len, keep_prob1, keep_prob2, y, y_p, label_pos, ]
     
     
@@ -178,17 +178,17 @@ def train_adv(model=None):
 
     y_p_data, y_data, x_data, sen_len_data, doc_len_data, word_distance, DGL_data, label_pos_data, emotion_pos_data = load_data(FLAGS.train_file_path, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
 
-    train_doc = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
-    train_word_dis = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
-    DGL = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len])
-    train_sen_len = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len])
-    train_doc_len = tf.placeholder(tf.int32, [None])
-    train_keep_prob1 = tf.placeholder(tf.float32)
-    train_keep_prob2 = tf.placeholder(tf.float32)
-    train_label = tf.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class])
-    train_label_p = tf.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102])
-    train_label_pos_op = tf.placeholder(tf.int32, [None])
-    train_emotion_pos_op = tf.placeholder(tf.int32,[None])
+    train_doc = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
+    train_word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
+    DGL = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len])
+    train_sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len])
+    train_doc_len = tf.compat.v1.placeholder(tf.int32, [None])
+    train_keep_prob1 = tf.compat.v1.placeholder(tf.float32)
+    train_keep_prob2 = tf.compat.v1.placeholder(tf.float32)
+    train_label = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.n_class])
+    train_label_p = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, 102])
+    train_label_pos_op = tf.compat.v1.placeholder(tf.int32, [None])
+    train_emotion_pos_op = tf.compat.v1.placeholder(tf.int32,[None])
 
 
     placeholders = [train_doc, train_word_dis, DGL, train_sen_len, train_doc_len, train_keep_prob1, train_keep_prob2, train_label, train_label_p, train_label_pos_op, train_emotion_pos_op]

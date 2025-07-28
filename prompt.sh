@@ -2,7 +2,7 @@
 #SBATCH --job-name=knowledge_graph_training
 #SBATCH --output=output.out
 #SBATCH --mem=64G
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:1
 
 source ~/.bashrc
 conda activate ecause

@@ -3,12 +3,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import time
 import numpy as np
-import tensorflow as tf
 import csv
 import ad_graph 
 import sys, os, time, codecs, pdb

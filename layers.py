@@ -277,7 +277,7 @@ def _num_labels(weights):
     return num_labels
 
 def adam_optimize(loss, global_step,lr, max_grad_norm):
-    optimizer = tf.train.AdamOptimizer(lr)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=lr)
     grads_and_vars = optimizer.compute_gradients(loss)
     capped_gvs = [(tf.clip_by_value(grad, -max_grad_norm, max_grad_norm), var) 
                 for grad, var in grads_and_vars if grad!=None]

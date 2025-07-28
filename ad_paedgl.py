@@ -203,8 +203,9 @@ def train_adv(model=None):
 
     print('build model...')
 
-    action_prob_op, gene_loss_op, train_gene_op = model.train_generator(global_step,word_embedding, pos_embedding)
-    dis_loss_op, train_dis_op, reward_op, pred_y, gt = model.train_discriminator(global_step,word_embedding, pos_embedding)
+
+    action_prob_op, gene_loss_op, train_gene_op = model.build_generator(global_step, word_embedding, pos_embedding)
+    dis_loss_op, train_dis_op, reward_op, pred_y, gt = model.build_discriminator(global_step, word_embedding, pos_embedding)
     # initialize prob
     original_prob_op = model.get_original_prob(word_embedding, pos_embedding) #
 

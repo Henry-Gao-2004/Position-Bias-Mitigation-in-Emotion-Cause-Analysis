@@ -153,7 +153,7 @@ class peaModel(object):
             s_tr,pred_c_tr,w,b,w_p,b_p,pred_p = self.logits_extractor(word_embedding, pos_embedding, x, word_dis, DGL, sen_len, doc_len, keep_prob1, keep_prob2,RNN = biLSTM,scope_name="original")
             logits = pred_c_tr
             softmax_prob = tf.reshape(logits,[-1,logits.shape[-1]])
-            new_y = tf.to_int32(tf.argmax(y,axis=2))
+            new_y = tf.cast(tf.argmax(y, axis=2), tf.int32)
             original_prob = tf.gather_nd(softmax_prob, tf.stack((tf.range(tf.shape(softmax_prob)[0],dtype=tf.int32),tf.reshape(new_y,[-1])),axis=1))
             #[None]?
         return original_prob#
@@ -192,7 +192,7 @@ class peaModel(object):
 
             tf.summary.scalar('dis_loss', dis_loss)
 
-            new_y = tf.to_int32(tf.argmax(y,axis=2))
+            new_y = tf.cast(tf.argmax(y, axis=2), tf.int32)
             prob = tf.gather_nd(dis_softmax_prob, tf.stack((tf.range(tf.shape(dis_softmax_prob)[0],dtype=tf.int32),tf.reshape(new_y,[-1])),axis=1))
     
             

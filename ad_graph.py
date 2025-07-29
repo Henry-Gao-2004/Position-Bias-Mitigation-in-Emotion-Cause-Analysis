@@ -243,7 +243,7 @@ class peaModel(object):
 
             tf.summary.scalar('dis_loss', dis_loss)
 
-            new_y = tf.to_int32(tf.argmax(y,axis=2))
+            new_y = tf.cast(tf.argmax(y, axis=2), tf.int32)
             prob = tf.gather_nd(dis_softmax_prob, tf.stack((tf.range(tf.shape(dis_softmax_prob)[0],dtype=tf.int32),tf.reshape(new_y,[-1])),axis=1))
             reward = original_prob - prob
 

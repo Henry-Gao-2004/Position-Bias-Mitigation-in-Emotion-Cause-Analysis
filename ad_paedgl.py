@@ -212,7 +212,7 @@ def train_adv(model=None):
 
     train_ckpt_dir = FLAGS.train_dir+'/train_ckpt'
     os.makedirs(train_ckpt_dir, exist_ok=True)
-    sum_writer = tf.summary.FileWriter(str(train_ckpt_dir), graph=tf.get_default_graph())
+    sum_writer = tf.compat.v1.summary.FileWriter(str(train_ckpt_dir), graph=tf.compat.v1.get_default_graph())
     best_dev_f1, best_attack_f1 = 0.0,0.0
     final_acc = 0.0
 

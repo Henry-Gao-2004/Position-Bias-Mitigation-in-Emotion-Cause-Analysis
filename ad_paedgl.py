@@ -221,7 +221,7 @@ def train_adv(model=None):
     all_sent_num = 0
     p_list, r_list, f1_list=[],[],[]
     att_plist, attr_list,attf1_list=[],[],[]
-    saver = tf.train.Saver(max_to_keep=1)
+    saver = tf.compat.v1.train.Saver(max_to_keep=1)
     
     tf_config = tf.ConfigProto()  
     tf_config.gpu_options.allow_growth = True

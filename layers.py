@@ -276,13 +276,12 @@ def _num_labels(weights):
     num_labels = tf.where(tf.equal(num_labels, 0.), 1., num_labels)
     return num_labels
 
-def adam_optimize(loss, global_step, lr, max_grad_norm):
+def adam_optimize(loss, global_step,lr, max_grad_norm):
     optimizer = tf.keras.optimizers.Adam(learning_rate=lr)
-    trainable_vars = tf.compat.v1.trainable_variables()
-    with tf.GradientTape() as tape:
-        grads = tape.gradient(loss, trainable_vars)
-    capped_grads = [tf.clip_by_value(grad, -max_grad_norm, max_grad_norm) if grad is not None else None for grad in grads]
-    training_op = optimizer.apply_gradients(capped_grads)
+    grads_and_vars = optimizer.compute_gradients(loss)
+    capped_gvs = [(tf.clip_by_value(grad, -max_grad_norm, max_grad_norm), var) 
+                for grad, var in grads_and_vars if grad!=None]
+    training_op = optimizer.apply_gradients(capped_gvs)
     return training_op
 
 def optimize(loss, global_step, max_grad_norm, lr, lr_decay, sync_replicas=False, 

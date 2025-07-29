@@ -282,7 +282,7 @@ def adam_optimize(loss, global_step, lr, max_grad_norm):
     with tf.GradientTape() as tape:
         grads = tape.gradient(loss, trainable_vars)
     capped_grads = [tf.clip_by_value(grad, -max_grad_norm, max_grad_norm) if grad is not None else None for grad in grads]
-    training_op = optimizer.apply_gradients(zip(capped_grads, trainable_vars))
+    training_op = optimizer.apply_gradients(capped_grads)
     return training_op
 
 def optimize(loss, global_step, max_grad_norm, lr, lr_decay, sync_replicas=False, 

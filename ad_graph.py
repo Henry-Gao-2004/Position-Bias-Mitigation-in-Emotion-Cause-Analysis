@@ -184,7 +184,7 @@ class peaModel(object):
             reg = tf.nn.l2_loss(w) + tf.nn.l2_loss(b) + tf.nn.l2_loss(w_p) + tf.nn.l2_loss(b_p)
             valid_num = tf.cast(tf.reduce_sum(doc_len), dtype=tf.float32)
             loss_cause = - tf.reduce_sum(tf.cast(y, tf.float32) * tf.math.log(pred_c_tr)) / valid_num
-            loss_position = - tf.reduce_sum(y_p * tf.log(pred_p)) / valid_num
+            loss_position = - tf.reduce_sum(y_p * tf.math.log(pred_p)) / valid_num
             dis_loss = loss_cause + loss_position * FLAGS.lambda1 + reg * FLAGS.l2_reg
 
             # train_dis_op = paedgl_optimize(dis_loss, self.global_step)
@@ -233,8 +233,8 @@ class peaModel(object):
 
             reg = tf.nn.l2_loss(w) + tf.nn.l2_loss(b) + tf.nn.l2_loss(w_p) + tf.nn.l2_loss(b_p)
             valid_num = tf.cast(tf.reduce_sum(doc_len), dtype=tf.float32)
-            loss_cause = - tf.reduce_sum(tf.cast(y, tf.float32) * tf.log(pred_c_tr)) / valid_num
-            loss_position = - tf.reduce_sum(y_p * tf.log(pred_p)) / valid_num
+            loss_cause = - tf.reduce_sum(tf.cast(y, tf.float32) * tf.math.log(pred_c_tr)) / valid_num
+            loss_position = - tf.reduce_sum(y_p * tf.math.log(pred_p)) / valid_num
             dis_loss = loss_cause + loss_position * FLAGS.lambda1 + reg * FLAGS.l2_reg
 
             # train_dis_op = adam_optimize(dis_loss, self.global_step)

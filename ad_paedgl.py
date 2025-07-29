@@ -223,7 +223,7 @@ def train_adv(model=None):
     att_plist, attr_list,attf1_list=[],[],[]
     saver = tf.compat.v1.train.Saver(max_to_keep=1)
     
-    tf_config = tf.ConfigProto()  
+    tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
     with tf.Session(config=tf_config) as sess:
         tf.set_random_seed(FLAGS.random_seed)

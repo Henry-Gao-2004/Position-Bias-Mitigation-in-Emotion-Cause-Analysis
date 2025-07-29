@@ -238,7 +238,7 @@ class peaModel(object):
             dis_loss = loss_cause + loss_position * FLAGS.lambda1 + reg * FLAGS.l2_reg
 
             # train_dis_op = adam_optimize(dis_loss, self.global_step)
-            train_dis_op = tf.train.AdamOptimizer(learning_rate=FLAGS.learning_rate).minimize(dis_loss)
+            train_dis_op = tf.compat.v1.train.AdamOptimizer(learning_rate=FLAGS.learning_rate).minimize(dis_loss)
             
 
             tf.summary.scalar('dis_loss', dis_loss)

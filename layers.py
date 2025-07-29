@@ -277,14 +277,43 @@ def _num_labels(weights):
     return num_labels
 
 def adam_optimize(loss, global_step,lr, max_grad_norm):
+    """
+    Computes gradients using Adam optimizer and returns the clipped gradients and variables.
+
+    Args:
+        loss (tf.Tensor): A scalar tensor representing the loss.
+        global_step (tf.Variable or int): Global step for optimizer tracking.
+        learning_rate (float or tf.Tensor): Learning rate for Adam.
+        max_grad_norm (float): Maximum global norm for gradient clipping.
+
+    Returns:
+        grads_and_vars (List[Tuple[tf.Tensor, tf.Variable]]): List of (clipped_gradient, variable).
+    """
+    # Create Adam optimizer
     optimizer = tf.keras.optimizers.Adam(learning_rate=lr)
+
+    # Get trainable variables
+    trainable_vars = tf.compat.v1.trainable_variables()
+
+    # Compute gradients
     with tf.GradientTape() as tape:
-        grads = tape.gradient(loss, tf.keras.backend.get_trainable_variables())
-    grads_and_vars = zip(grads, tf.keras.backend.get_trainable_variables())
-    capped_gvs = [(tf.clip_by_value(grad, -max_grad_norm, max_grad_norm), var) 
-                for grad, var in grads_and_vars if grad!=None]
-    training_op = optimizer.apply_gradients(capped_gvs)
-    return training_op
+        tape.watch(trainable_vars)
+        loss_value = loss() if callable(loss) else loss
+
+    grads = tape.gradient(loss_value, trainable_vars)
+
+    # Clip gradients by global norm
+    clipped_grads, _ = tf.clip_by_global_norm(grads, max_grad_norm)
+
+    # Optionally apply the gradients (you can uncomment below)
+    # optimizer.apply_gradients(zip(clipped_grads, trainable_vars))
+
+    # Manually increment global step (if it's a variable)
+    if isinstance(global_step, tf.Variable):
+        global_step.assign_add(1)
+
+    return list(zip(clipped_grads, trainable_vars))
+
 
 def optimize(loss, global_step, max_grad_norm, lr, lr_decay, sync_replicas=False, 
             replicas_to_aggregate=1, task_id=0):

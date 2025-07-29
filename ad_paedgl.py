@@ -244,7 +244,7 @@ def train_adv(model=None):
             [x_data, y_data, y_p_data, sen_len_data, doc_len_data, word_distance, DGL_data,label_pos_data,emotion_pos_data])
 
             test_data = [te_x, te_word_dis, te_DGL, te_sen_len, te_doc_len, 1., 1., te_y, te_y_p, te_label_pos,te_emotion_pos]
-            sess.run(tf.global_variables_initializer())
+            tf.compat.v1.global_variables_initializer().run(session=sess)
             this_global_step = 0
             print("*******************************")
             # print("RUN THE n_split:%d:"%(n_split))

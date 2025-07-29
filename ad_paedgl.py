@@ -226,7 +226,7 @@ def train_adv(model=None):
     tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
     with tf.compat.v1.Session(config=tf_config) as sess:
-        tf.set_random_seed(FLAGS.random_seed)
+        tf.random.set_seed(FLAGS.random_seed)
         np.random.seed(FLAGS.random_seed)
         
         iteration = 0

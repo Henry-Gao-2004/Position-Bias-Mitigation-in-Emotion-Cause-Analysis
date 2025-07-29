@@ -285,7 +285,9 @@ def adam_optimize(loss, global_step, lr, max_grad_norm):
     capped_gvs = [(tf.clip_by_value(grad, -max_grad_norm, max_grad_norm), var) 
                   for grad, var in zip(gradients, trainable_vars) if grad is not None]
     training_op = optimizer.apply_gradients(capped_gvs)
-    return training_op
+    with tf.control_dependencies([training_op]):
+        increment_global_step = tf.compat.v1.assign_add(global_step, 1)
+    return increment_global_step
 
 def optimize(loss, global_step, max_grad_norm, lr, lr_decay, sync_replicas=False, 
             replicas_to_aggregate=1, task_id=0):

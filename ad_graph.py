@@ -72,12 +72,14 @@ class peaModel(object):
         with tf.name_scope(scope_name) as scope: # Changed from variable_scope to name_scope for TensorFlow 2.x compatibility
             x = tf.nn.embedding_lookup(word_embedding, x)
             inputs = tf.reshape(x, [-1, FLAGS.max_sen_len, FLAGS.embedding_dim])
+            print('inputs shape:', inputs.shape)
             word_dis = tf.nn.embedding_lookup(pos_embedding, word_dis)
             sen_dis = word_dis[:,:,0,:]
             word_dis = tf.reshape(word_dis, [-1, FLAGS.max_sen_len, FLAGS.embedding_dim_pos])
+            print('word_dis shape:', word_dis.shape)
             if FLAGS.use_position == 'PAE':
                 print('using PAE')
-                inputs = tf.compat.v1.concat([inputs, word_dis], axis=2)
+                inputs = tf.concat([inputs, word_dis], axis=2)
             inputs = tf.nn.dropout(inputs, rate=1 - keep_prob1)
             sen_len = tf.reshape(sen_len, [-1])
             with tf.name_scope('word_encode'):  #maybe

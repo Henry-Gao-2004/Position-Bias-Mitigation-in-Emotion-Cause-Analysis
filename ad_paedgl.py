@@ -93,8 +93,6 @@ def train(model=None):
         print("pos_embedding is constant")
         pos_embedding = tf.constant(pos_embedding, dtype=tf.float32, name='pos_embedding')
 
-    print("Shape of word_embedding:", word_embedding.shape)
-    print("Shape of pos_embedding:", pos_embedding.shape)
     print('build model...')
     
     x = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])

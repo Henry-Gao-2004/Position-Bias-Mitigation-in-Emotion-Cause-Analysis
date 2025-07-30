@@ -261,6 +261,8 @@ def train_adv(model=None):
                     raw_sentence = train_doc_data.copy()
                     '''Step2: warm up the discriminator'''
                     if this_global_step < FLAGS.dis_warm_up_step:
+                        print("Shape of dis_loss_op:", dis_loss_op.shape)
+                        print("Shape of train_dis_op:", train_dis_op.shape)
                         dis_loss, _,= sess.run([dis_loss_op, train_dis_op],feed_dict={
                             'discriminator/train_doc:0': train_doc_data,
                             'discriminator/train_sen_len:0': train_sen_len_data,

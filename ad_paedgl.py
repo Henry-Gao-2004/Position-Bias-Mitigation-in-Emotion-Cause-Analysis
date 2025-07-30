@@ -93,6 +93,8 @@ def train(model=None):
         print("pos_embedding is constant")
         pos_embedding = tf.constant(pos_embedding, dtype=tf.float32, name='pos_embedding')
 
+    print("Shape of word_embedding:", word_embedding.shape)
+    print("Shape of pos_embedding:", pos_embedding.shape)
     print('build model...')
     
     x = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
@@ -261,14 +263,6 @@ def train_adv(model=None):
                     raw_sentence = train_doc_data.copy()
                     '''Step2: warm up the discriminator'''
                     if this_global_step < FLAGS.dis_warm_up_step:
-                        print("Shapes of tensors:")
-                        print("train_doc_data:", train_doc_data.shape)
-                        print("train_sen_len_data:", train_sen_len_data.shape)
-                        print("train_label_data:", train_label_data.shape)
-                        print("train_word_dis_data:", train_word_dis_data.shape)
-                        print("train_DGL_data:", train_DGL_data.shape)
-                        print("train_doc_len_data:", train_doc_len_data.shape)
-                        print("train_label_p_data:", train_label_p_data.shape)
                         dis_loss, _,= sess.run([dis_loss_op, train_dis_op],feed_dict={
                             'discriminator/train_doc:0': train_doc_data,
                             'discriminator/train_sen_len:0': train_sen_len_data,

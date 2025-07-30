@@ -15,8 +15,8 @@ class FLAGS:
     learning_rate = 0.001
     generator_learning_rate = 0.001
     max_doc_len = 75
-    max_sen_len = 30
-    embedding_dim = 300
+    max_sen_len = 45
+    embedding_dim = 200
     embedding_dim_pos = 50
     n_hidden = 128
     n_class = 2

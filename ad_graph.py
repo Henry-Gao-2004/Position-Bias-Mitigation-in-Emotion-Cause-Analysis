@@ -77,6 +77,9 @@ class peaModel(object):
             word_dis = tf.reshape(word_dis, [-1, FLAGS.max_sen_len, FLAGS.embedding_dim_pos])
             if FLAGS.use_position == 'PAE':
                 print('using PAE')
+                print("Shape of word_dis:", tf.shape(word_dis))
+                print("Shape of inputs:", tf.shape(inputs))
+                word_dis = tf.reshape(word_dis, tf.shape(inputs))  # Ensure word_dis matches inputs' shape
                 inputs = tf.concat([inputs, word_dis], axis=2)
             inputs = tf.nn.dropout(inputs, rate=1 - keep_prob1)
             sen_len = tf.reshape(sen_len, [-1])

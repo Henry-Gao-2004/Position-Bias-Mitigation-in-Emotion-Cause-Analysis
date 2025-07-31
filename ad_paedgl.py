@@ -307,6 +307,7 @@ def train_adv(model=None):
                                                             train_label_data,
                                                             train_DGL_data,
                                                             train_emotion_pos_data)
+                        print("reward: ",reward)
                         reward = sess.run(reward_op, feed_dict={
                             'discriminator/train_doc:0': doc_new_data,
                             'discriminator/original_prob:0':original_prob_data,
@@ -324,8 +325,8 @@ def train_adv(model=None):
                         average_reward = all_reward/all_sent_num
                         reward -= average_reward
 
-                        print(gene_loss_op)
-                        print(train_gene_op)
+                        print("gene: ", gene_loss_op)
+                        print("train:", train_gene_op)
                         gene_loss, _=sess.run([gene_loss_op, train_gene_op], feed_dict={
                             'generator/train_doc:0': train_doc_data,
                             'generator/train_sen_len:0': train_sen_len_data,

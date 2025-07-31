@@ -307,7 +307,7 @@ def train_adv(model=None):
                                                             train_label_data,
                                                             train_DGL_data,
                                                             train_emotion_pos_data)
-                        print("reward: ",reward_op)
+                        
                         reward = sess.run(reward_op, feed_dict={
                             'discriminator/train_doc:0': doc_new_data,
                             'discriminator/original_prob:0':original_prob_data,
@@ -325,21 +325,21 @@ def train_adv(model=None):
                         average_reward = all_reward/all_sent_num
                         reward -= average_reward
 
-                        print("gene: ", gene_loss_op)
-                        print("train:", train_gene_op)
-                        gene_loss, _=sess.run([gene_loss_op, train_gene_op], feed_dict={
-                            'generator/train_doc:0': train_doc_data,
-                            'generator/train_sen_len:0': train_sen_len_data,
-                            'generator/train_label:0': train_label_data,
-                            'generator/train_word_dis:0':train_word_dis_data,
-                            'generator/train_DGL:0':train_DGL_data,
-                            'generator/train_doc_len:0':train_doc_len_data,
-                            'generator/train_p_label:0':train_label_p_data,
-                            'generator/keep_prob1:0':FLAGS.keep_prob1,
-                            'generator/keep_prob2:0':FLAGS.keep_prob2,
-                            'generator/reward_score:0': reward,
-                            'generator/emotion_pos:0':train_emotion_pos_data,
-                            'generator/action_idx:0': action_idx})
+                        
+                        gene_loss, _ = model.train_generator_step(
+                            train_doc_data,
+                            train_sen_len_data,
+                            train_label_data,
+                            train_word_dis_data,
+                            train_DGL_data,
+                            train_doc_len_data,
+                            train_label_p_data,
+                            FLAGS.keep_prob1,
+                            FLAGS.keep_prob2,
+                            reward,
+                            train_emotion_pos_data,
+                            action_idx
+                        )
                         dis_loss = 0
                     else:  # adversarial train
                         rand_num = random.choice([1]*FLAGS.every+[0])

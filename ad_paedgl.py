@@ -225,6 +225,7 @@ def train_adv(model=None):
     
     tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
+    tf.compat.v1.disable_eager_execution() 
     with tf.compat.v1.Session(config=tf_config) as sess:
         tf.random.set_seed(FLAGS.random_seed)
         np.random.seed(FLAGS.random_seed)
@@ -307,7 +308,7 @@ def train_adv(model=None):
                                                             train_label_data,
                                                             train_DGL_data,
                                                             train_emotion_pos_data)
-                        
+                        print("Reward: ", reward_op)
                         reward = sess.run(reward_op, feed_dict={
                             'discriminator/train_doc:0': doc_new_data,
                             'discriminator/original_prob:0':original_prob_data,
@@ -324,9 +325,9 @@ def train_adv(model=None):
                         all_reward += np.sum(reward)
                         average_reward = all_reward/all_sent_num
                         reward -= average_reward
-
-                        tf.compat.v1.disable_eager_execution() 
                         
+                        print("Gene Loss: ", gene_loss)
+                        print("Train Gene Operation: ", train_gene_op)
                         gene_loss, _=sess.run([gene_loss_op, train_gene_op], feed_dict={
                             'generator/train_doc:0': train_doc_data,
                             'generator/train_sen_len:0': train_sen_len_data,

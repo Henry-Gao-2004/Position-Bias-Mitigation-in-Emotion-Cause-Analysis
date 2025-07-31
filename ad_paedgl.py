@@ -307,7 +307,7 @@ def train_adv(model=None):
                                                             train_label_data,
                                                             train_DGL_data,
                                                             train_emotion_pos_data)
-                        print("reward: ",reward)
+                        print("reward: ",reward_op)
                         reward = sess.run(reward_op, feed_dict={
                             'discriminator/train_doc:0': doc_new_data,
                             'discriminator/original_prob:0':original_prob_data,

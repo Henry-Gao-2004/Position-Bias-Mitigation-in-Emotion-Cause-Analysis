@@ -324,18 +324,20 @@ def train_adv(model=None):
                         average_reward = all_reward/all_sent_num
                         reward -= average_reward
 
-                        gene_loss, _ = tf.compat.v1.get_default_session().run([gene_loss_op, train_gene_op], feed_dict={
+                        print(gene_loss_op)
+                        print(train_gene_op)
+                        gene_loss, _=sess.run([gene_loss_op, train_gene_op], feed_dict={
                             'generator/train_doc:0': train_doc_data,
                             'generator/train_sen_len:0': train_sen_len_data,
                             'generator/train_label:0': train_label_data,
-                            'generator/train_word_dis:0': train_word_dis_data,
-                            'generator/train_DGL:0': train_DGL_data,
-                            'generator/train_doc_len:0': train_doc_len_data,
-                            'generator/train_p_label:0': train_label_p_data,
-                            'generator/keep_prob1:0': FLAGS.keep_prob1,
-                            'generator/keep_prob2:0': FLAGS.keep_prob2,
+                            'generator/train_word_dis:0':train_word_dis_data,
+                            'generator/train_DGL:0':train_DGL_data,
+                            'generator/train_doc_len:0':train_doc_len_data,
+                            'generator/train_p_label:0':train_label_p_data,
+                            'generator/keep_prob1:0':FLAGS.keep_prob1,
+                            'generator/keep_prob2:0':FLAGS.keep_prob2,
                             'generator/reward_score:0': reward,
-                            'generator/emotion_pos:0': train_emotion_pos_data,
+                            'generator/emotion_pos:0':train_emotion_pos_data,
                             'generator/action_idx:0': action_idx})
                         dis_loss = 0
                     else:  # adversarial train

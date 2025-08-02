@@ -35,7 +35,7 @@ def adam_optimize(loss,global_step=None):
     return layers_lib.adam_optimize(loss,global_step,FLAGS.learning_rate,FLAGS.max_grad_norm)
 
 def gene_adam_optimize(loss,global_step=None):
-    return layers_lib.adam_optimize(loss,global_step,FLAGS.generator_learning_rate,FLAGS.max_grad_norm)
+    return tf.keras.optimizers.Adam(learning_rate=FLAGS.generator_learning_rate).minimize(loss, var_list=tf.compat.v1.trainable_variables())
     
 def optimize(loss, global_step=None):
     return layers_lib.optimize(

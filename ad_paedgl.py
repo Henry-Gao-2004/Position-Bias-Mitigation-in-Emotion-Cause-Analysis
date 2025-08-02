@@ -326,7 +326,6 @@ def train_adv(model=None):
                         average_reward = all_reward/all_sent_num
                         reward -= average_reward
                         
-                        print("Gene Loss: ", gene_loss_op)
                         print("Train Gene Operation: ", train_gene_op)
                         sess.run(gene_loss_op, feed_dict={
                             'generator/train_doc:0': train_doc_data,

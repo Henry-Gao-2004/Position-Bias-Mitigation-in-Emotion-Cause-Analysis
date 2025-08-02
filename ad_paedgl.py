@@ -470,8 +470,7 @@ def train_adv(model=None):
                 if this_global_step!=0 and  this_global_step > FLAGS.dis_warm_up_step + FLAGS.gene_warm_up_step:
                     test_doc_data,test_sen_len_data,test_label_data,test_word_dis_data,test_DGL_data,test_doc_len_data,test_label_p_data, test_emotion_pos_data\
                      = sess.run([train_doc,train_sen_len,train_label,train_word_dis,DGL,train_doc_len,train_label_p,train_emotion_pos_op],
-                    
-            feed_dict=dict(zip(placeholders, test_data)))
+                                feed_dict=dict(zip(placeholders, test_data)))
                     dev_loss,dev_pre,dev_gt = sess.run([paedgl_loss_op,paedgl_pre_op,paedgl_gt_op],feed_dict={
                         'paedgl/train_doc:0': test_doc_data,
                         'paedgl/train_sen_len:0': test_sen_len_data,
@@ -481,7 +480,8 @@ def train_adv(model=None):
                         'paedgl/train_p_label:0':test_label_p_data,
                         'paedgl/keep_prob1:0':1.0,
                         'paedgl/keep_prob2:0':1.0
-                })  
+                        })  
+                    
                     print("")
                     print("*********test results*******")
                     acc, p, r, f1= acc_prf(dev_pre,dev_gt, test_doc_len_data)
@@ -529,9 +529,9 @@ def train_adv(model=None):
                         'paedgl/train_p_label:0':test_label_p_data,
                         'paedgl/keep_prob1:0':1.0,
                         'paedgl/keep_prob2:0':1.0
-                })
+                        })
                     print(dev_pre, dev_gt)
-                    acc, p, r, f1= acc_prf(dev_pre,dev_gt, test_doc_len_data)
+                    acc, p, r, f1= acc_prf(dev_pre, dev_gt, test_doc_len_data)
                     print("ATTCK_paedgl_loss=%f,dev acc=%f,,p:%f,r:%f,f1:%f At global step: %d."%(dev_loss,acc,p,r,f1, this_global_step))
                     if f1 > best_attack_f1:
                         best_attack_f1= f1
@@ -550,28 +550,29 @@ def train_adv(model=None):
         p, r, f1 = map(lambda x: np.array(x).mean(), [p_list, r_list, f1_list])
         print("original_model: f1_score in 10 fold: {}\naverage : p {} r {} f1 {}\n".format(np.array(f1_list).reshape(-1,1), p, r, f1))
 
-        # Perform inference using the model
-        input_sentence = "im very happy because the program ran"
-        # Preprocess the input sentence
-        input_data = utils.prepare_data.preprocess_sentence(input_sentence, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
+        # Prepare the input data for inference
+        sentence = "I am happy that the program ran successfully"
+        test_doc_data, test_sen_len_data, test_label_data, test_word_dis_data, test_DGL_data, test_doc_len_data, test_label_p_data, test_emotion_pos_data = model.prepare_inference_data(
+            sentence, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
 
-        # Extract necessary placeholders
-        inference_doc, inference_sen_len, inference_doc_len = input_data['doc'], input_data['sen_len'], input_data['doc_len']
-
-        # Run the model for inference
-        inference_pred = sess.run(paedgl_pre_op, feed_dict={
-            'paedgl/train_doc:0': [inference_doc],
-            'paedgl/train_sen_len:0': [inference_sen_len],
-            'paedgl/train_doc_len:0': [inference_doc_len],
+        # Perform inference
+        dev_loss, dev_pre, dev_gt = sess.run([paedgl_loss_op, paedgl_pre_op, paedgl_gt_op], feed_dict={
+            'paedgl/train_doc:0': test_doc_data,
+            'paedgl/train_sen_len:0': test_sen_len_data,
+            'paedgl/train_label:0': test_label_data,
+            'paedgl/train_word_dis:0': test_word_dis_data,
+            'paedgl/train_doc_len:0': test_doc_len_data,
+            'paedgl/train_p_label:0': test_label_p_data,
             'paedgl/keep_prob1:0': 1.0,
             'paedgl/keep_prob2:0': 1.0
         })
 
-        print("Inference result for input sentence '{}': {}".format(input_sentence, inference_pred))
-
-        # Original attacked model evaluation
-        p, r, f1 = map(lambda x: np.array(x).mean(), [att_plist, attr_list, attf1_list])
-        print("attacked_model:f1_score in 10 fold: {}\naverage : p {} r {} f1 {}\n".format(np.array(attf1_list).reshape(-1,1), p, r, f1))
+        # Print the inference results
+        print("*********Inference results*******")
+        acc, p, r, f1 = acc_prf(dev_pre, dev_gt, test_doc_len_data)
+        print("peadgl_loss=%f, paedgl acc=%f, p:%f, r:%f, f1:%f" % (dev_loss, acc, p, r, f1))
+        print("Predicted labels:", dev_pre)
+        
         
 
 def save_checkpoint(saver=None, sess=None, dir=None, n_split=None, best_dev_f1=None):

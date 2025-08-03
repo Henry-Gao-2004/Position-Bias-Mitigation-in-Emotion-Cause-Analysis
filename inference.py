@@ -18,7 +18,7 @@ def check_version():
     if not v.startswith("2.19"):
         print(f"Warning: Running under tf.__version__ = {v}, but 2.19.x is recommended.")
     tf.compat.v1.disable_v2_behavior()  # enables tf1.x graph + Session API
-
+print("Current working directory:", os.getcwd())
 # first, set flags (must be defined *before* importing ad_graph or utils.prepare_data)
 flags = tf.compat.v1.app.flags
 FLAGS = flags.FLAGS

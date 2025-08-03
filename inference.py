@@ -23,7 +23,7 @@ def check_version():
 flags = tf.compat.v1.app.flags
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('train_dir', 'train_ckpt', 'path to checkpoint directory')
+flags.DEFINE_string('train_dir', 'data/train_ckpt', 'path to checkpoint directory')
 flags.DEFINE_string('model_type', 'peadgl', '')
 flags.DEFINE_string('mode', 'test', 'ignored')
 flags.DEFINE_integer('embedding_dim', 200, '')

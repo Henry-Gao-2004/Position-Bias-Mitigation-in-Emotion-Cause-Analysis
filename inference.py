@@ -18,7 +18,7 @@ def check_version():
     if not v.startswith("2.19"):
         print(f"Warning: Running under tf.__version__ = {v}, but 2.19.x is recommended.")
     tf.compat.v1.disable_v2_behavior()  # enables tf1.x graph + Session API
-print("Current working directory:", os.getcwd())
+
 # first, set flags (must be defined *before* importing ad_graph or utils.prepare_data)
 flags = tf.compat.v1.app.flags
 FLAGS = flags.FLAGS
@@ -75,10 +75,9 @@ def build_inputs(doc_ids, max_doc_len, max_sen_len):
 def main():
     check_version()
 
-    # load embeddings and word-to-index mapping
-    word2idx, embeddings, _ = load_w2v(
-        FLAGS.embedding_dim, FLAGS.embedding_dim_pos,
-        FLAGS.train_dir, FLAGS.w2v_file)  # train_dir is any placeholder for load_w2v
+    embedding_dim = 300
+    embedding_dim_pos = 50
+    word2idx, embeddings, embedding_pos = load_w2v(embedding_dim, embedding_dim_pos, "data/clause_keywords.csv", "data/w2v_200.txt")
 
     max_sen_len = FLAGS.max_sen_len
     max_doc_len = FLAGS.max_doc_len

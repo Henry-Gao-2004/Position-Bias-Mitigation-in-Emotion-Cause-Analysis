@@ -75,7 +75,7 @@ def build_inputs(doc_ids, max_doc_len, max_sen_len):
 def main():
     check_version()
 
-    embedding_dim = 300
+    embedding_dim = 200
     embedding_dim_pos = 50
     word2idx, embeddings, embedding_pos = load_w2v(embedding_dim, embedding_dim_pos, "data/clause_keywords.csv", "data/w2v_200.txt")
 

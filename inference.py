@@ -134,7 +134,7 @@ def main():
     pos_embedding = tf.Variable(pos_embedding, dtype=tf.float32, name='pos_embedding')
     dis_loss_op, train_dis_op, reward_op, pred_y, gt = model.train_discriminator(global_step,word_embedding, pos_embedding)
 
-    saver = tf.compat.v1.train.Saver()
+    saver = tf.compat.v1.train.Saver(max_to_keep=1)
 
     tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
@@ -142,7 +142,7 @@ def main():
     with tf.compat.v1.Session(config=tf_config) as sess:
         tf.random.set_seed(FLAGS.random_seed)
         np.random.seed(FLAGS.random_seed)
-        
+
         ckpt = tf.train.latest_checkpoint(FLAGS.train_dir)
         if ckpt is None:
             raise FileNotFoundError(f"No checkpoint found in {FLAGS.train_dir}")

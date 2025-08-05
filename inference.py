@@ -20,6 +20,8 @@ def check_version():
         print(f"Warning: Running under tf.__version__ = {v}, but 2.19.x is recommended.")
     tf.compat.v1.disable_v2_behavior()  # enables tf1.x graph + Session API
 
+import argparse
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--train_dir', type=str, default='./data/', help='Directory for logs and checkpoints.')

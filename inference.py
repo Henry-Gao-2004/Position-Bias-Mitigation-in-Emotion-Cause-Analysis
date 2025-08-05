@@ -24,7 +24,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--train_dir', type=str, default='./data/', help='Directory for logs and checkpoints.')
+parser.add_argument('--train_dir', type=str, default='./data/train_ckpt', help='Directory for logs and checkpoints.')
 #>>>>>>>>>>>>>>>>>>>>> For models <<<<<<<<<<<<<<<<<<<<<<#
 parser.add_argument('--model_type', type=str, default='peadgl', help='embedding file')
 parser.add_argument('--mode', type=str, default='train_adv', help='embedding file')

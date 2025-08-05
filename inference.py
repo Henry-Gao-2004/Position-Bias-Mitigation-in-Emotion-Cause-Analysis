@@ -10,6 +10,7 @@
 import os
 import sys
 import numpy as np
+from ad_paedgl import load_data
 
 import tensorflow as tf
 

@@ -136,7 +136,13 @@ def main():
 
     saver = tf.compat.v1.train.Saver()
 
-    with tf.compat.v1.Session() as sess:
+    tf_config = tf.compat.v1.ConfigProto()
+    tf_config.gpu_options.allow_growth = True
+    tf.compat.v1.disable_eager_execution() 
+    with tf.compat.v1.Session(config=tf_config) as sess:
+        tf.random.set_seed(FLAGS.random_seed)
+        np.random.seed(FLAGS.random_seed)
+        
         ckpt = tf.train.latest_checkpoint(FLAGS.train_dir)
         if ckpt is None:
             raise FileNotFoundError(f"No checkpoint found in {FLAGS.train_dir}")

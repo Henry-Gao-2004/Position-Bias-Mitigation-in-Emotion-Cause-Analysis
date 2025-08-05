@@ -20,27 +20,55 @@ def check_version():
         print(f"Warning: Running under tf.__version__ = {v}, but 2.19.x is recommended.")
     tf.compat.v1.disable_v2_behavior()  # enables tf1.x graph + Session API
 
-# first, set flags (must be defined *before* importing ad_graph or utils.prepare_data)
-flags = tf.compat.v1.app.flags
-FLAGS = flags.FLAGS
+parser = argparse.ArgumentParser()
 
-flags.DEFINE_string('train_dir', 'data/train_ckpt', 'path to checkpoint directory')
-flags.DEFINE_string('model_type', 'peadgl', '')
-flags.DEFINE_string('mode', 'test', 'ignored')
-flags.DEFINE_integer('embedding_dim', 200, '')
-flags.DEFINE_integer('embedding_dim_pos', 50, '')
-flags.DEFINE_integer('max_sen_len', 30, '')
-flags.DEFINE_integer('max_doc_len', 75, '')
-flags.DEFINE_integer('n_hidden', 100, '')
-flags.DEFINE_integer('n_class', 2, '')
-flags.DEFINE_float('lambda1', 0.1, '')
-flags.DEFINE_float('learning_rate', 0.005, '')
-flags.DEFINE_integer('batch_size', 32, '')
-flags.DEFINE_integer('dis_warm_up_step', 50, '')
-flags.DEFINE_integer('gene_warm_up_step', 50, '')
-flags.DEFINE_integer('random_seed', 29, '')
-flags.DEFINE_integer('max_steps', 100000, '')
-flags.DEFINE_string('w2v_file', 'data/w2v_200.txt', '')
+parser.add_argument('--train_dir', type=str, default='./data/', help='Directory for logs and checkpoints.')
+#>>>>>>>>>>>>>>>>>>>>> For models <<<<<<<<<<<<<<<<<<<<<<#
+parser.add_argument('--model_type', type=str, default='peadgl', help='embedding file')
+parser.add_argument('--mode', type=str, default='train_adv', help='embedding file')
+# >>>>>>>>>>>>>>>>>>>> For peaModel <<<<<<<<<<<<<<<<<<<< #
+## embedding parameters ##
+parser.add_argument('--w2v_file', type=str, default='data/w2v_200.txt', help='embedding file')
+parser.add_argument('--embedding_dim', type=int, default=200, help='dimension of word embedding')
+parser.add_argument('--embedding_dim_pos', type=int, default=50, help='dimension of position embedding')
+parser.add_argument('--pos_trainable', type=str, default='', help='whether position embedding is trainable')
+## input struct ##
+parser.add_argument('--max_sen_len', type=int, default=30, help='max number of tokens per sentence')
+parser.add_argument('--max_doc_len', type=int, default=75, help='max number of sentences per documents')
+## model struct ##
+parser.add_argument('--n_hidden', type=int, default=100, help='number of hidden unit')
+parser.add_argument('--n_class', type=int, default=2, help='number of distinct class')
+parser.add_argument('--use_position', type=str, default='PAE', help='PAE or PEC')
+parser.add_argument('--use_DGL', type=str, default='use', help='whether use DGL')
+parser.add_argument('--hierachy', type=str, default='', help='whether use hierachy')
+# >>>>>>>>>>>>>>>>>>>> For Data <<<<<<<<<<<<<<<<<<<< #
+parser.add_argument('--train_file_path', type=str, default='./data/clause_keywords.csv', help='training file')
+parser.add_argument('--log_file_name', type=str, default='PAEDGL.log', help='name of log file')
+# >>>>>>>>>>>>>>>>>>>> For Training <<<<<<<<<<<<<<<<<<<< #
+parser.add_argument('--training_iter', type=int, default=20, help='number of train iter')
+parser.add_argument('--scope', type=str, default='PAEDGL', help='RNN scope')
+parser.add_argument('--test_steps', type=int, default=200, help='test at every step')
+parser.add_argument('--train_steps', type=int, default=20, help='show statistics of training')
+parser.add_argument('--every', type=int, default=1, help='one sample generate 2 negative sample')  # number of batches negtive samples
+# not easy to tune 
+parser.add_argument('--batch_size', type=int, default=32, help='number of samples per batch')
+parser.add_argument('--learning_rate', type=float, default=0.005, help='learning rate')
+parser.add_argument('--keep_prob1', type=float, default=0.5, help='word embedding dropout keep prob')
+parser.add_argument('--keep_prob2', type=float, default=1.0, help='softmax layer dropout keep prob')
+parser.add_argument('--l2_reg', type=float, default=0.00001, help='l2 regularization rate')
+parser.add_argument('--lambda1', type=float, default=0.1, help='rate for position prediction loss')
+
+parser.add_argument('--dis_warm_up_step', type=int, default=50, help='discriminator warm up step')
+parser.add_argument('--gene_warm_up_step', type=int, default=50, help='generator warm up step')
+
+#>>>>>>>>>>>>>>>>>>For generator <<<<<<<<<<<<<<<<<<<#
+parser.add_argument('--generator_learning_rate', type=float, default=0.001, help='rate for position prediction loss')
+parser.add_argument('--max_grad_norm', type=float, default=1.0, help='Clip the global gradient norm to this value.')
+
+parser.add_argument('--random_seed', type=int, default=29, help='random_seed')
+parser.add_argument('--max_steps', type=int, default=100000, help='random_seed')
+
+FLAGS, unparsed = parser.parse_known_args()
 
 # now import actual model and data utilities
 import ad_graph  # defines peaModel class

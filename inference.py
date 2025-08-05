@@ -78,7 +78,10 @@ def main():
 
     # build the model structure
     model = ad_graph.peaModel()
-    word_id_mapping, word_embedding, pos_embedding = load_w2v(FLAGS.embedding_dim, FLAGS.embedding_dim_pos, FLAGS.train_file_path, FLAGS.w2v_file)
+    embedding_dim = 300
+    embedding_dim_pos = 50
+    
+    word_id_mapping, word_embedding, pos_embedding = load_w2v(embedding_dim, embedding_dim_pos, "data/clause_keywords.csv", "data/w2v_200.txt")
 
     y_p_data, y_data, x_data, sen_len_data, doc_len_data, word_distance, DGL_data, label_pos_data, emotion_pos_data = load_data(FLAGS.train_file_path, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
 

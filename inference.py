@@ -110,6 +110,7 @@ def main():
         if ckpt is None:
             raise FileNotFoundError(f"No checkpoint found in {FLAGS.train_dir}")
         saver.restore(sess, ckpt)
+        print("Model restored from checkpoint:", ckpt)
 
         sentence = "I am happy because the program ran"
         doc_ids = [preprocess_one_sentence(sentence, word_id_mapping, FLAGS.max_sen_len)]

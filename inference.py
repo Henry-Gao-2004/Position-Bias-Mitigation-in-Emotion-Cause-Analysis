@@ -78,7 +78,7 @@ def main():
 
     # build the model structure
     model = ad_graph.peaModel()
-    embedding_dim = 300
+    embedding_dim = 200
     embedding_dim_pos = 50
     
     word_id_mapping, word_embedding, pos_embedding = load_w2v(embedding_dim, embedding_dim_pos, "data/clause_keywords.csv", "data/w2v_200.txt")

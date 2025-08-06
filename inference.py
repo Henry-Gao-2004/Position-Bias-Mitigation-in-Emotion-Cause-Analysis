@@ -130,7 +130,7 @@ def main():
     pos_embedding = tf.Variable(pos_embedding, dtype=tf.float32, name='pos_embedding')
     dis_loss_op, train_dis_op, reward_op, pred_y, gt = model.train_discriminator(global_step,word_embedding, pos_embedding)
 
-    checkpoint = tf.compat.v1.train.Checkpoint(model=model, global_step=global_step)
+    saver = tf.compat.v1.train.Saver(max_to_keep=1)
     tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
     tf.compat.v1.disable_eager_execution() 
@@ -138,12 +138,12 @@ def main():
         tf.random.set_seed(FLAGS.random_seed)
         np.random.seed(FLAGS.random_seed)
 
-        ckpt = tf.train.latest_checkpoint(FLAGS.train_dir)
-        if ckpt is None:
+        ckpt = tf.compat.v1.train.get_checkpoint_state(FLAGS.train_dir)
+        if ckpt and ckpt.model_checkpoint_path:
+            print("Model restored from checkpoint:", ckpt.model_checkpoint_path)
+            saver.restore(sess, ckpt.model_checkpoint_path)
+        else:
             raise FileNotFoundError(f"No checkpoint found in {FLAGS.train_dir}")
-        
-        print("Model restored from checkpoint:", ckpt)
-        checkpoint.restore(ckpt).expect_partial()
 
         sentence = "I am happy because the program ran"
         doc_ids = [preprocess_one_sentence(sentence, word_id_mapping, FLAGS.max_sen_len)]

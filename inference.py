@@ -136,6 +136,7 @@ def main():
 
     saver = tf.compat.v1.train.Saver(max_to_keep=1)
 
+
     tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
     tf.compat.v1.disable_eager_execution() 
@@ -146,8 +147,9 @@ def main():
         ckpt = tf.train.latest_checkpoint(FLAGS.train_dir)
         if ckpt is None:
             raise FileNotFoundError(f"No checkpoint found in {FLAGS.train_dir}")
-        saver.restore(sess, ckpt)
+        
         print("Model restored from checkpoint:", ckpt)
+        saver.restore(sess, ckpt)
 
         sentence = "I am happy because the program ran"
         doc_ids = [preprocess_one_sentence(sentence, word_id_mapping, FLAGS.max_sen_len)]

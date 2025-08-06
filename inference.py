@@ -135,6 +135,7 @@ def main():
     with tf.compat.v1.Session() as sess:
         tf.random.set_seed(FLAGS.random_seed)
         np.random.seed(FLAGS.random_seed)
+        tf.compat.v1.global_variables_initializer().run(session=sess)
 
         ckpt = tf.train.latest_checkpoint(FLAGS.train_dir)
         print("Model restored from checkpoint:", ckpt)

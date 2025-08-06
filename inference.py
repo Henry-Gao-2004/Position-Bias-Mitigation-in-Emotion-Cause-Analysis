@@ -14,11 +14,7 @@ from ad_paedgl import load_data
 
 import tensorflow as tf
 
-def check_version():
-    v = tf.__version__
-    if not v.startswith("2.19"):
-        print(f"Warning: Running under tf.__version__ = {v}, but 2.19.x is recommended.")
-    tf.compat.v1.disable_v2_behavior()  # enables tf1.x graph + Session API
+tf.compat.v1.disable_v2_behavior()
 
 import argparse
 

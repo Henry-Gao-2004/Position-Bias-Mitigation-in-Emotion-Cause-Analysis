@@ -141,27 +141,28 @@ def main():
         saver = tf.compat.v1.train.import_meta_graph(ckpt+'.meta')
         saver.restore(sess, ckpt)
 
-        sentence = "I am happy because the program ran"
-        doc_ids = [preprocess_one_sentence(sentence, word_id_mapping, FLAGS.max_sen_len)]
-        x_np, word_dis_np, DGL_np, sen_len_np, doc_len_np = build_inputs(doc_ids, FLAGS.max_doc_len, FLAGS.max_sen_len)
-
-        feed_dict = {
-            train_doc: x_np,
-            train_word_dis: word_dis_np,
-            DGL: DGL_np,
-            train_sen_len: sen_len_np,
-            train_doc_len: doc_len_np,
-            train_keep_prob1: 1.0,
-            train_keep_prob2: 1.0
-        }
-
-        probs = sess.run(pred_y, feed_dict=feed_dict)
-
-    p0, p1 = probs[0, 0]  # [non‑cause, cause]
-    label = 'CAUSE' if p1 > p0 else 'NON‑CAUSE'
-    print("Sentence:", sentence)
-    print(f"Scores → non‑cause: {p0:.4f}, cause: {p1:.4f}")
-    print("Predicted clause label:", label)
+        sentence_file = "data/test.csv"
+        y_p_data, y_data, x_data, sen_len_data, doc_len_data, word_distance, DGL_data, label_pos_data,emotion_pos = load_data(sentence_file, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
+        test_data = [x_data, word_distance, DGL_data, sen_len_data, doc_len_data, 1., 1., y_data, y_p_data, label_pos_data,emotion_pos]
+        test_doc_data,test_sen_len_data,test_label_data,test_word_dis_data,test_DGL_data,test_doc_len_data,test_label_p_data, test_emotion_pos_data\
+                     = sess.run([train_doc,train_sen_len,train_label,train_word_dis,DGL,train_doc_len,train_label_p,train_emotion_pos_op],
+                                feed_dict=dict(zip(placeholders, test_data)))
+        
+        paedgl_loss_op, train_paedgl_op,paedgl_pre_op,paedgl_gt_op= model.paedgl(global_step,word_embedding, pos_embedding)
+        dev_pre,dev_gt = sess.run([paedgl_pre_op,paedgl_gt_op],feed_dict={
+            'paedgl/train_doc:0': test_doc_data,
+            'paedgl/train_sen_len:0': test_sen_len_data,
+            'paedgl/train_label:0': test_label_data,
+            'paedgl/train_word_dis:0':test_word_dis_data,
+            'paedgl/train_doc_len:0':test_doc_len_data,
+            'paedgl/train_p_label:0':test_label_p_data,
+            'paedgl/keep_prob1:0':1.0,
+            'paedgl/keep_prob2:0':1.0
+        })
+        print("predicted: \n")
+        print(dev_pre)
+        print("ground truth: \n")
+        print(dev_gt)
 
 if __name__ == "__main__":
     main()

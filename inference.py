@@ -110,8 +110,6 @@ def main():
     
     word_id_mapping, word_embedding, pos_embedding = load_w2v(embedding_dim, embedding_dim_pos, "data/clause_keywords.csv", "data/w2v_200.txt")
 
-    y_p_data, y_data, x_data, sen_len_data, doc_len_data, word_distance, DGL_data, label_pos_data, emotion_pos_data = load_data(FLAGS.train_file_path, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
-
     train_doc = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
     train_word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
     DGL = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.max_doc_len])
@@ -150,6 +148,7 @@ def main():
         paedgl_loss_op, train_paedgl_op,paedgl_pre_op,paedgl_gt_op= model.paedgl(global_step,word_embedding, pos_embedding)
         y_p_data, y_data, x_data, sen_len_data, doc_len_data, word_distance, DGL_data, label_pos_data,emotion_pos = load_data(sentence_file, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
         test_data = [x_data, word_distance, DGL_data, sen_len_data, doc_len_data, 1., 1., y_data, y_p_data, label_pos_data,emotion_pos]
+        tf.compat.v1.global_variables_initializer().run(session=sess)
         test_doc_data,test_sen_len_data,test_label_data,test_word_dis_data,test_DGL_data,test_doc_len_data,test_label_p_data, test_emotion_pos_data\
                      = sess.run([train_doc,train_sen_len,train_label,train_word_dis,DGL,train_doc_len,train_label_p,train_emotion_pos_op],
                                 feed_dict=dict(zip(placeholders, test_data)))

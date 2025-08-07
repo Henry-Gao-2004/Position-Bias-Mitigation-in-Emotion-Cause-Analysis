@@ -161,8 +161,8 @@ def main():
             'paedgl/train_word_dis:0':test_word_dis_data,
             'paedgl/train_doc_len:0':test_doc_len_data,
             'paedgl/train_p_label:0':test_label_p_data,
-            'paedgl/keep_prob1:0':1.0,
-            'paedgl/keep_prob2:0':1.0
+            'paedgl/keep_prob1:0':FLAGS.keep_prob1,
+            'paedgl/keep_prob2:0':FLAGS.keep_prob2,
         })
         print("predicted: \n")
         print(dev_pre)

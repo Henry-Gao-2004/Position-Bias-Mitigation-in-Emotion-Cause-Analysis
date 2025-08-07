@@ -130,7 +130,6 @@ def main():
     pos_embedding = tf.Variable(pos_embedding, dtype=tf.float32, name='pos_embedding')
     dis_loss_op, train_dis_op, reward_op, pred_y, gt = model.train_discriminator(global_step,word_embedding, pos_embedding)
 
-    saver = tf.compat.v1.train.Saver()
     tf.compat.v1.disable_eager_execution() 
     with tf.compat.v1.Session() as sess:
         tf.random.set_seed(FLAGS.random_seed)
@@ -139,6 +138,7 @@ def main():
 
         ckpt = tf.train.latest_checkpoint(FLAGS.train_dir)
         print("Model restored from checkpoint:", ckpt)
+        saver = tf.compat.v1.train.import_meta_graph('./data/train_ckpt/'+ckpt+'.meta')
         saver.restore(sess, ckpt)
 
         sentence = "I am happy because the program ran"

@@ -127,9 +127,8 @@ def main():
     placeholders = [train_doc, train_word_dis, DGL, train_sen_len, train_doc_len, train_keep_prob1, train_keep_prob2, train_label, train_label_p, train_label_pos_op, train_emotion_pos_op]
     
     word_embedding = tf.constant(word_embedding, dtype=tf.float32, name='word_embedding')
-    pos_embedding = tf.Variable(pos_embedding, dtype=tf.float32, name='pos_embedding')
+    pos_embedding = tf.constant(pos_embedding, dtype=tf.float32, name='pos_embedding')
 
-    tf.compat.v1.disable_eager_execution() 
     with tf.compat.v1.Session() as sess:
         tf.random.set_seed(FLAGS.random_seed)
         np.random.seed(FLAGS.random_seed)
@@ -141,12 +140,6 @@ def main():
         saver.restore(sess, ckpt)
 
         sentence_file = "data/test.csv"
-        if FLAGS.pos_trainable:
-            print('pos_embedding trainable!')
-            pos_embedding = tf.Variable(pos_embedding, dtype=tf.float32, name='pos_embedding')
-        else:
-            print("pos_embedding is constant")
-            pos_embedding = tf.constant(pos_embedding, dtype=tf.float32, name='pos_embedding')
 
         print('build model...')
 

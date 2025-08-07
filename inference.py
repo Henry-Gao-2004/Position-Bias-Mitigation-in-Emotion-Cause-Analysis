@@ -128,7 +128,6 @@ def main():
     
     word_embedding = tf.constant(word_embedding, dtype=tf.float32, name='word_embedding')
     pos_embedding = tf.Variable(pos_embedding, dtype=tf.float32, name='pos_embedding')
-    dis_loss_op, train_dis_op, reward_op, pred_y, gt = model.train_discriminator(global_step,word_embedding, pos_embedding)
 
     tf.compat.v1.disable_eager_execution() 
     with tf.compat.v1.Session() as sess:
@@ -143,9 +142,7 @@ def main():
 
         sentence_file = "data/test.csv"
         y_p_data, y_data, x_data, sen_len_data, doc_len_data, word_distance, DGL_data, label_pos_data,emotion_pos = load_data(sentence_file, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
-        print(x_data)
         test_data = [x_data, word_distance, DGL_data, sen_len_data, doc_len_data, 1., 1., y_data, y_p_data, label_pos_data,emotion_pos]
-        print(test_data)
         test_doc_data,test_sen_len_data,test_label_data,test_word_dis_data,test_DGL_data,test_doc_len_data,test_label_p_data, test_emotion_pos_data\
                      = sess.run([train_doc,train_sen_len,train_label,train_word_dis,DGL,train_doc_len,train_label_p,train_emotion_pos_op],
                                 feed_dict=dict(zip(placeholders, test_data)))

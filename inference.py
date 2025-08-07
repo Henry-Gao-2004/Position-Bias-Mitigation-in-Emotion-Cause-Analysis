@@ -153,14 +153,8 @@ def main():
         test_doc_data,test_sen_len_data,test_label_data,test_word_dis_data,test_DGL_data,test_doc_len_data,test_label_p_data, test_emotion_pos_data\
                      = sess.run([train_doc,train_sen_len,train_label,train_word_dis,DGL,train_doc_len,train_label_p,train_emotion_pos_op],
                                 feed_dict=dict(zip(placeholders, test_data)))
-        print("doc data:", test_doc_data)
-        print("sen len:", test_sen_len_data)
-        print("label:", test_label_data)
-        print("doc len:", test_doc_len_data)
-        print("word dis:", test_word_dis_data)
-        print("label_p:", test_label_p_data)
         
-        dev_pre,dev_gt = sess.run([paedgl_pre_op,paedgl_gt_op],feed_dict={
+        dev_pre,dev_gt = sess.run([paedgl_loss_op, train_paedgl_op,paedgl_pre_op,paedgl_gt_op],feed_dict={
             'paedgl/train_doc:0': test_doc_data,
             'paedgl/train_sen_len:0': test_sen_len_data,
             'paedgl/train_label:0': test_label_data,

@@ -138,7 +138,7 @@ def main():
 
         ckpt = tf.train.latest_checkpoint(FLAGS.train_dir)
         print("Model restored from checkpoint:", ckpt)
-        saver = tf.compat.v1.train.import_meta_graph('./data/train_ckpt/'+ckpt+'.meta')
+        saver = tf.compat.v1.train.import_meta_graph(ckpt+'.meta')
         saver.restore(sess, ckpt)
 
         sentence = "I am happy because the program ran"

@@ -141,7 +141,6 @@ def main():
         saver.restore(sess, ckpt)
 
         sentence_file = "data/test.csv"
-        word_embedding = tf.constant(word_embedding, dtype=tf.float32, name='word_embedding')
         if FLAGS.pos_trainable:
             print('pos_embedding trainable!')
             pos_embedding = tf.Variable(pos_embedding, dtype=tf.float32, name='pos_embedding')

@@ -546,33 +546,6 @@ def train_adv(model=None):
             f1_list.append(best_dev_f1)
             n_split = n_split +1
 
-
-        p, r, f1 = map(lambda x: np.array(x).mean(), [p_list, r_list, f1_list])
-        print("original_model: f1_score in 10 fold: {}\naverage : p {} r {} f1 {}\n".format(np.array(f1_list).reshape(-1,1), p, r, f1))
-
-        # Prepare the input data for inference
-        sentence = "I am happy that the program ran successfully"
-        test_doc_data, test_sen_len_data, test_label_data, test_word_dis_data, test_DGL_data, test_doc_len_data, test_label_p_data, test_emotion_pos_data = model.prepare_inference_data(
-            sentence, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
-
-        # Perform inference
-        dev_loss, dev_pre, dev_gt = sess.run([paedgl_loss_op, paedgl_pre_op, paedgl_gt_op], feed_dict={
-            'paedgl/train_doc:0': test_doc_data,
-            'paedgl/train_sen_len:0': test_sen_len_data,
-            'paedgl/train_label:0': test_label_data,
-            'paedgl/train_word_dis:0': test_word_dis_data,
-            'paedgl/train_doc_len:0': test_doc_len_data,
-            'paedgl/train_p_label:0': test_label_p_data,
-            'paedgl/keep_prob1:0': 1.0,
-            'paedgl/keep_prob2:0': 1.0
-        })
-
-        # Print the inference results
-        print("*********Inference results*******")
-        acc, p, r, f1 = acc_prf(dev_pre, dev_gt, test_doc_len_data)
-        print("peadgl_loss=%f, paedgl acc=%f, p:%f, r:%f, f1:%f" % (dev_loss, acc, p, r, f1))
-        print("Predicted labels:", dev_pre)
-
         sentence_file = "data/test.csv"
         y_p_data, y_data, x_data, sen_len_data, doc_len_data, word_distance, DGL_data, label_pos_data,emotion_pos = load_data(sentence_file, word_id_mapping, FLAGS.max_doc_len, FLAGS.max_sen_len)
         test_data = [x_data, word_distance, DGL_data, sen_len_data, doc_len_data, 1., 1., y_data, y_p_data, label_pos_data,emotion_pos]

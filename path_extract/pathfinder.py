@@ -15,7 +15,7 @@ import pickle5
 
 
 config = configparser.ConfigParser()
-config.read("paths.cfg")
+config.read("../paths.cfg")
 
 
 cpnet = None

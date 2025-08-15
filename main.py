@@ -16,42 +16,39 @@ from sklearn.model_selection import ParameterGrid
 import math
 import random
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
-
-
-FLAGS = tf.app.flags.FLAGS
+FLAGS = tf.compat.v1.app.flags.FLAGS
 # >>>>>>>>>>>>>>>>>>>> For Model <<<<<<<<<<<<<<<<<<<< #
 # embedding parameters ##
-tf.app.flags.DEFINE_integer('embedding_dim', 200, 'dimension of word embedding')
-tf.app.flags.DEFINE_integer('embedding_dim_pos', 50, 'dimension of position embedding')
+tf.compat.v1.app.flags.DEFINE_integer('embedding_dim', 200, 'dimension of word embedding')
+tf.compat.v1.app.flags.DEFINE_integer('embedding_dim_pos', 50, 'dimension of position embedding')
 # input shape ##
-tf.app.flags.DEFINE_integer('max_doc_len', 75, 'max number of tokens per documents')
-tf.app.flags.DEFINE_integer('max_sen_len', 45, 'max number of tokens per sentence')
-tf.app.flags.DEFINE_integer('max_path_num', 10, 'max number of paths per sentence')
-tf.app.flags.DEFINE_integer('max_path_len', 7, 'max number of tokens per path')
+tf.compat.v1.app.flags.DEFINE_integer('max_doc_len', 75, 'max number of tokens per documents')
+tf.compat.v1.app.flags.DEFINE_integer('max_sen_len', 45, 'max number of tokens per sentence')
+tf.compat.v1.app.flags.DEFINE_integer('max_path_num', 10, 'max number of paths per sentence')
+tf.compat.v1.app.flags.DEFINE_integer('max_path_len', 7, 'max number of tokens per path')
 # >>>>>>>>>>>>>>>>>>>> For Data <<<<<<<<<<<<<<<<<<<< #
-tf.app.flags.DEFINE_string('log_file_name', '', 'name of log file')
+tf.compat.v1.app.flags.DEFINE_string('log_file_name', '', 'name of log file')
 # >>>>>>>>>>>>>>>>>>>> For Training <<<<<<<<<<<<<<<<<<<< #
-tf.app.flags.DEFINE_integer('training_iter', 25, 'number of train iter')
-tf.app.flags.DEFINE_integer('run_times', 1, 'repeat times of this model')
-tf.app.flags.DEFINE_string('scope', 'RNN', 'RNN scope')
-tf.app.flags.DEFINE_integer('batch_size', 32, 'number of example per batch')
-tf.app.flags.DEFINE_float('lr_main', 0.005, 'learning rate')
-tf.app.flags.DEFINE_integer('main_decay_step', 60, 'main learning rate decay step')
-tf.app.flags.DEFINE_float('keep_prob1', 0.5, 'word embedding training dropout keep prob')
-tf.app.flags.DEFINE_float('lr_decay', 0.5, 'learning rate decay')
-tf.app.flags.DEFINE_integer('seed', 0, 'random seed')
+tf.compat.v1.app.flags.DEFINE_integer('training_iter', 25, 'number of train iter')
+tf.compat.v1.app.flags.DEFINE_integer('run_times', 1, 'repeat times of this model')
+tf.compat.v1.app.flags.DEFINE_string('scope', 'RNN', 'RNN scope')
+tf.compat.v1.app.flags.DEFINE_integer('batch_size', 32, 'number of example per batch')
+tf.compat.v1.app.flags.DEFINE_float('lr_main', 0.005, 'learning rate')
+tf.compat.v1.app.flags.DEFINE_integer('main_decay_step', 60, 'main learning rate decay step')
+tf.compat.v1.app.flags.DEFINE_float('keep_prob1', 0.5, 'word embedding training dropout keep prob')
+tf.compat.v1.app.flags.DEFINE_float('lr_decay', 0.5, 'learning rate decay')
+tf.compat.v1.app.flags.DEFINE_integer('seed', 0, 'random seed')
 # >>>>>>>>>>>>>>>>>>>> For Model <<<<<<<<<<<<<<<<<<<< #
-tf.app.flags.DEFINE_integer('n_hidden', 100, 'number of hidden unit')
-tf.app.flags.DEFINE_integer('n_class', 2, 'number of distinct class')
-tf.app.flags.DEFINE_float('l2_reg', 1e-2, 'l2 regularization')
+tf.compat.v1.app.flags.DEFINE_integer('n_hidden', 100, 'number of hidden unit')
+tf.compat.v1.app.flags.DEFINE_integer('n_class', 2, 'number of distinct class')
+tf.compat.v1.app.flags.DEFINE_float('l2_reg', 1e-2, 'l2 regularization')
 # Clause Encode ##
-tf.app.flags.DEFINE_integer('num_heads', 5, 'the num heads of attention')#head
-tf.app.flags.DEFINE_integer('n_layers', 3, 'the layers of transformer beside main')
+tf.compat.v1.app.flags.DEFINE_integer('num_heads', 5, 'the num heads of attention')#head
+tf.compat.v1.app.flags.DEFINE_integer('n_layers', 3, 'the layers of transformer beside main')
 # GCN ##
-tf.app.flags.DEFINE_integer('n_hops', 1, 'the layers of transformer beside main')#graph_layer
-tf.app.flags.DEFINE_float('keep_prob2', 1.0, 'GCN layer dropout keep prob') # graph 出来以后的结果
-tf.app.flags.DEFINE_integer('edge_type', 1, '2 for s-edge and k-edge, 3 for extra r-edge')
+tf.compat.v1.app.flags.DEFINE_integer('n_hops', 1, 'the layers of transformer beside main')#graph_layer
+tf.compat.v1.app.flags.DEFINE_float('keep_prob2', 1.0, 'GCN layer dropout keep prob') # graph 出来以后的结果
+tf.compat.v1.app.flags.DEFINE_integer('edge_type', 1, '2 for s-edge and k-edge, 3 for extra r-edge')
 
 
 def mask_logits(target, mask):

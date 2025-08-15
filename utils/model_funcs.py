@@ -8,7 +8,7 @@ import json
 import random
 import pickle as pk
 from sklearn.metrics import precision_score, recall_score, f1_score
-from tensorflow.contrib.layers import xavier_initializer
+from tensorflow.keras.initializers import GlorotUniform
 
 path = 'data/'
 max_doc_len = 75

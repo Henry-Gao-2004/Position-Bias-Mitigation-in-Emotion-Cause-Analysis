@@ -152,7 +152,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
 def run():
     if FLAGS.log_file_name:
         sys.stdout = open(FLAGS.log_file_name, 'w')
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
     localtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     print("***********localtime: ", localtime)
     #load data

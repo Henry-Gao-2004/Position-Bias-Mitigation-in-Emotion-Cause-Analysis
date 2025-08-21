@@ -76,6 +76,7 @@ def get_edge(src_concept, tgt_concept):
 # source and target is text
 def find_paths(source, target, ifprint = False):
     global cpnet, concept2id, relation2id, id2relation, id2concept, cpnet_simple
+    print("Finding paths between %s and %s"%(source, target))
     #if no match word, just skip the keyword:
     if (not source in concept2id.keys()) or (not target in concept2id.keys()):
         print("No avaiable Emotion word or keywords in concept dict")
@@ -205,7 +206,7 @@ if __name__ == '__main__':
         print(idx)
 
         emotion_word = (ori_file[idx].split(",")[-1]).strip()
-        print(keywords_file[idx])
+        print("keywords:", keywords_file[idx])
         keywords = keywords_file[idx].split(",")
         if len(keywords_file[idx])<2: #no keywords
             print("keyword_pairs:0: {Not relevant to the emotion")

@@ -205,8 +205,9 @@ if __name__ == '__main__':
         print(idx)
 
         emotion_word = (ori_file[idx].split(",")[-1]).strip()
+        print(keywords_file[idx])
         keywords = keywords_file[idx].split(",")
-        if len(keywords)<2: #no keywords
+        if len(keywords_file[idx])<2: #no keywords
             print("keyword_pairs:0: {Not relevant to the emotion")
             print("}")
         else:

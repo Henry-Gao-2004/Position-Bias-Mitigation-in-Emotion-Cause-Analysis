@@ -77,7 +77,9 @@ def get_edge(src_concept, tgt_concept):
 def find_paths(source, target, ifprint = False):
     global cpnet, concept2id, relation2id, id2relation, id2concept, cpnet_simple
     if target in concept2id.keys():
+        sys.stdout = sys.__stdout__
         print("\n\n\n\n\n\n\n")
+        sys.stdout = open('raw_paths.log', 'a')
     #if no match word, just skip the keyword:
     if (not source in concept2id.keys()) or (not target in concept2id.keys()):
         print("No avaiable Emotion word or keywords in concept dict")

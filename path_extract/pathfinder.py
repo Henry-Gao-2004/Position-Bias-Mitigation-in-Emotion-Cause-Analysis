@@ -68,9 +68,9 @@ def load_cpnet():
 def get_edge(src_concept, tgt_concept):
     global cpnet, concept2id, relation2id, id2relation, id2concept
     rel_list = cpnet[src_concept][tgt_concept]
-    sys.stdout = sys.__stdout__
-    print(rel_list)
-    sys.stdout = open('raw_paths.log', 'a')
+    # sys.stdout = sys.__stdout__
+    # print(rel_list)
+    # sys.stdout = open('raw_paths.log', 'a')
     # tmp = [rel_list[item]["weight"] for item in rel_list]
     # s = tmp.index(min(tmp))
     # rel = rel_list[s]["rel"]
@@ -80,9 +80,9 @@ def get_edge(src_concept, tgt_concept):
 def find_paths(source, target, ifprint = False):
     global cpnet, concept2id, relation2id, id2relation, id2concept, cpnet_simple
     if target in concept2id.keys():
-        sys.stdout = sys.__stdout__
-        print("\n\n\n\n\n\n\n")
-        sys.stdout = open('raw_paths.log', 'a')
+        # sys.stdout = sys.__stdout__
+        # print("\n\n\n\n\n\n\n")
+        # sys.stdout = open('raw_paths.log', 'a')
     #if no match word, just skip the keyword:
     if (not source in concept2id.keys()) or (not target in concept2id.keys()):
         print("No avaiable Emotion word or keywords in concept dict")

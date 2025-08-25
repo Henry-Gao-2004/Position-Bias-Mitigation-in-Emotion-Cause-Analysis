@@ -74,7 +74,7 @@ def get_edge(src_concept, tgt_concept):
     # tmp = [rel_list[item]["weight"] for item in rel_list]
     # s = tmp.index(min(tmp))
     # rel = rel_list[s]["rel"]
-    return list(set([rel_list[item]["rel"] for item in rel_list]))
+    return [rel_list["rel"]]
 
 # source and target is text
 def find_paths(source, target, ifprint = False):

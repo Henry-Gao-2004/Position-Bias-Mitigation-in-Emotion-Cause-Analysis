@@ -207,6 +207,7 @@ if __name__ == '__main__':
         print(idx)
 
         emotion_word = (ori_file[idx].split(",")[2]).strip()
+        emotion_word = ch_en_dict.get(emotion_word, emotion_word)
 
         print("keywords:", keywords_file[idx])
         keywords = keywords_file[idx].split(",")

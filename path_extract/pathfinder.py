@@ -37,24 +37,24 @@ def load_resources():
             concept2id[w.strip()] = len(concept2id)
             id2concept[len(id2concept)] = w.strip()
 
-    print("concept2id done")
+    #print("concept2id done")
     id2relation = {}
     relation2id = {}
     with open(config["paths"]["relation_vocab"], "r", encoding="utf8") as f:
         for w in f.readlines():
             id2relation[len(id2relation)] = w.strip()
             relation2id[w.strip()] = len(relation2id)
-    print("relation2id done")
+    #print("relation2id done")
 
 def load_cpnet():
     global cpnet,concept2id, relation2id, id2relation, id2concept, cpnet_simple
-    print("loading cpnet....")
+    #print("loading cpnet....")
     with open(config["paths"]["conceptnet_en_graph"], "rb") as f:
         data = pickle5.load(f)
     cpnet = nx.Graph(data)
 
     # cpnet = nx.read_gpickle(config["paths"]["conceptnet_en_graph"])
-    print("Done")
+    #print("Done")
 
     cpnet_simple = nx.Graph()
     for u, v, data in cpnet.edges(data=True):
@@ -76,12 +76,12 @@ def get_edge(src_concept, tgt_concept):
 # source and target is text
 def find_paths(source, target, ifprint = False):
     global cpnet, concept2id, relation2id, id2relation, id2concept, cpnet_simple
-    print("Finding paths between %s and %s"%(source, target))
-    print(source in concept2id.keys())
-    print(target in concept2id.keys())
+    
+    if target in concept2id.keys():
+        print("yes")
     #if no match word, just skip the keyword:
     if (not source in concept2id.keys()) or (not target in concept2id.keys()):
-        print("No avaiable Emotion word or keywords in concept dict")
+        #print("No avaiable Emotion word or keywords in concept dict")
         return []
     else:
         s = concept2id[source]
@@ -89,10 +89,10 @@ def find_paths(source, target, ifprint = False):
 
     # try:
     #     lenth, path = nx.bidirectional_dijkstra(cpnet, source=s, target=t, weight="weight")
-    #     # print(lenth)
-    #     print(path)
+    #     # #print(lenth)
+    #     #print(path)
     # except nx.NetworkXNoPath:
-    #     print("no path")
+    #     #print("no path")
     # paths = [path]
 
         if s not in cpnet_simple.nodes() or t not in cpnet_simple.nodes():
@@ -111,13 +111,13 @@ def find_paths(source, target, ifprint = False):
             if len(all_path) >= 100:  # top shortest 300 paths
                 break
         if len(all_path)<1:
-            print("keyword_pairs:0: {Not relevant to the emotion")
-            print("}")
+            #print("keyword_pairs:0: {Not relevant to the emotion")
+            #print("}")
             return []
         all_path.sort(key=len, reverse=False)
         pf_res = []
         for p in all_path:
-            # print([id2concept[i] for i in p])
+            # #print([id2concept[i] for i in p])
             rl = []
             for src in range(len(p) - 1):
                 src_concept = p[src]
@@ -132,11 +132,13 @@ def find_paths(source, target, ifprint = False):
                             rel_list_str.append(id2relation[rel])
                         else:
                             rel_list_str.append(id2relation[rel - len(id2relation)]+"*")
-                    print(id2concept[src_concept], "----[%s]---> " %("/".join(rel_list_str)), end="")
+                    #print(id2concept[src_concept], "----[%s]---> " %("/".join(rel_list_str)), end="")
                     if src + 1 == len(p) - 1:
-                        print(id2concept[tgt_concept], end="")
+                        #print(id2concept[tgt_concept], end="")
+                        continue
             if ifprint:
-                print()
+                #print()
+                continue
         return pf_res
 
 #TODO
@@ -153,7 +155,7 @@ def process(filename, batch_id=-1):
     output_path = filename + ".%d" % (batch_id) + ".pf"
     import os
     if os.path.exists(output_path):
-        print(output_path + " exists. Skip!")
+        #print(output_path + " exists. Skip!")
         return
 
     load_resources()
@@ -181,8 +183,8 @@ if __name__ == '__main__':
     load_cpnet()
     #>>>>>>>> show paths for case study >>>>>>>##
     # find_paths("survival", "touch", ifprint=True)
-    # print("--------")
-    # print();print();print();print();print();
+    # #print("--------")
+    # #print();#print();#print();#print();#print();
 
     sys.stdout = open('raw_paths.log', 'w')
     keywords_file = open('data/keywords_en.csv', encoding='utf-8').readlines()#extracted keywords in english
@@ -198,31 +200,33 @@ if __name__ == '__main__':
     whole_data =[]
     doc_id = 1
 
-    print("document%d: "%doc_id)
+    #print("document%d: "%doc_id)
     for idx in range(len(ori_file)):
         next_id = int(ori_file[idx].split(",")[0])
         if next_id > doc_id and next_id>1:
             doc_id = next_id
-            print("document%d:"%doc_id)
-        print("sen_%d: "%int(ori_file[idx].split(",")[1]))
-        print(idx)
+            #print("document%d:"%doc_id)
+        #print("sen_%d: "%int(ori_file[idx].split(",")[1]))
+        #print(idx)
 
-        emotion_word = (ori_file[idx].split(",")[2]).strip()
+        emotion_word = ch_en_dict.get((ori_file[idx].split(",")[2]).strip())
 
-        print("keywords:", keywords_file[idx])
+        #print("keywords:", keywords_file[idx])
         keywords = keywords_file[idx].split(",")
         if len(keywords_file[idx])<2: #no keywords
-            print("keyword_pairs:0: {Not relevant to the emotion")
-            print("}")
+            #print("keyword_pairs:0: {Not relevant to the emotion")
+            #print("}")
+            continue
         else:
             for kw_id in range(len(keywords)):
                 if (keywords[kw_id].strip()).lower() == emotion_word.lower():
-                    print("keyword_pairs:0: {%s is the emotion expression"%emotion_word)
-                    print("}")
+                    #print("keyword_pairs:0: {%s is the emotion expression"%emotion_word)
+                    #print("}")
+                    continue
                 else:
-                    print("keyword_pairs:%d: {"%kw_id)
+                    #print("keyword_pairs:%d: {"%kw_id)
                     find_paths((keywords[kw_id].strip()).lower(), emotion_word, ifprint=True)
-                    print("}")
+                    #print("}")
 
 """Test code"""
 # keywords_file = open('../path_code/input_file/keywords_en.csv').readlines()

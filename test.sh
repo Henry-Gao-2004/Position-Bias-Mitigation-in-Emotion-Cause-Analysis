@@ -17,7 +17,7 @@ cd /home/hgao62/Position-Bias-Mitigation-in-Emotion-Cause-Analysis
 # PROMPT_FILE="prompts.txt"
 # MAX_NEW_TOKENS=1024
 
-python3 main.py
+python3 path_extract/pathfinder.py
     # --gpu_id $GPU_ID \
     # --models $MODELS \
     # --prompt_file $PROMPT_FILE \

@@ -207,11 +207,7 @@ if __name__ == '__main__':
         print("sen_%d: "%int(ori_file[idx].split(",")[1]))
         print(idx)
 
-        emotion_word = (ori_file[idx].split(",")[-1]).strip()
-        emotion_word_en = ""
-        for emotion_word_ch_part in emotion_word.split(" "):
-            emotion_word_en += ch_en_dict.get(emotion_word_ch_part, emotion_word_ch_part) + " "
-        emotion_word = emotion_word_en.strip()
+        emotion_word = (ori_file[idx].split(",")[2]).strip()
 
         print("keywords:", keywords_file[idx])
         keywords = keywords_file[idx].split(",")

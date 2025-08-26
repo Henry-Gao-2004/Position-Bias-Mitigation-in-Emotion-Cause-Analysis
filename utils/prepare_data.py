@@ -184,7 +184,7 @@ def print_training_info(FLAGS):
 
 if __name__ == "__main__":
     # Example usage
-    embedding_dim = 300
+    embedding_dim = 200
     embedding_dim_pos = 50
     
     word_irdx, embedding, embedding_pos = load_w2v(embedding_dim, embedding_dim_pos, "data/clause_keywords.csv", "data/w2v_200.txt")

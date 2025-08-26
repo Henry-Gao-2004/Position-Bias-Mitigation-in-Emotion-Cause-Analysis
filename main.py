@@ -158,8 +158,7 @@ def run():
     #load data
     x_data, y_data, sen_len_data, doc_len_data, word_distance, word_embedding, pos_embedding, adj, emotion_pos_data, path_data, path_num_data, path_len_data,id2word\
         = func.load_data(edge_type=FLAGS.edge_type)
-    print(word_embedding)
-    word_embedding = tf.constant(word_embedding, dtype=tf.float64, name='word_embedding')
+    word_embedding = tf.constant(np.array(word_embedding), dtype=tf.float32, name='word_embedding')
     pos_embedding = tf.constant(pos_embedding, dtype=tf.float32, name='pos_embedding')
     print('build model...')
     start_time = time.time()

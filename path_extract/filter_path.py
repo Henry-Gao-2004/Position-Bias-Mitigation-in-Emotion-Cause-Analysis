@@ -133,14 +133,19 @@ def en2ch_path(en_path):
 
 
 filtered_paths = []
+path_len = []
 for paths in path_data_list:
     filtered_paths.append(return_top10_paths(paths))
-    # for line in return_top10_paths(paths):
-    #     path_file.writelines(" ".join(line)+'\n')
+    for line in return_top10_paths(paths):
+        path_len.append(len(line))
 
 print(len(filtered_paths),filtered_paths[0])
 with open("path_data_1120_num15.txt", "wb") as pkl_file:
     pickle.dump(filtered_paths, pkl_file)
+with open("path_num_data.txt", "wb") as pkl_file:
+    pickle.dump(path_num_list, pkl_file)
+with open("path_len_data.txt", "wb") as pkl_file:
+    pickle.dump(path_len, pkl_file)
 
 
 

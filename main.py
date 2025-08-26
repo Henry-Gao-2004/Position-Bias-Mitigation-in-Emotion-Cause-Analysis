@@ -94,7 +94,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
         path_inputs = tf.reshape(path_data_op, [-1, FLAGS.max_path_len, FLAGS.embedding_dim])
         sh2 = 2 * FLAGS.n_hidden
-        path_inputs = tf.nn.dropout(path_inputs, keep_prob=keep_prob1)
+        path_inputs = tf.nn.dropout(path_inputs, rate=1-keep_prob1)
         path_len = tf.reshape(path_len_op, [-1])
         pathWordEncode = RNN(path_inputs, path_len,n_hidden=FLAGS.n_hidden,scope='path_encode_layer')
         pathWordEncode = tf.reshape(pathWordEncode, [-1, FLAGS.max_path_len, sh2])

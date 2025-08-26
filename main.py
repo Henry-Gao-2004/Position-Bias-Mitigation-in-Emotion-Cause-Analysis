@@ -370,7 +370,7 @@ def GCNLayer2(hidden_tensor, path_data, adj, emotion_pos,hidden_mask,scope_var):
 def path_GCN(hidden_tensor, path_data, adj, emotion_pos,hidden_mask,scope_var):
         adjacency_tensor = adj
         path_hidden = tf.concat([hidden_tensor,path_data],axis = -1)
-        path_hidden = tf.keras.layers.Dense(units=hidden_tensor.shape[-1])(path_hidden)
+        path_hidden = tf.keras.layers.Dense(units=int(hidden_tensor.shape[-1]))(path_hidden)
 
         # hidden_tensors = tf.stack([tf.layers.dense(inputs=hidden_tensor, units=hidden_tensor.shape[-1]),path_hidden],1)*tf.expand_dims(tf.expand_dims(hidden_mask, -1), 1)
 

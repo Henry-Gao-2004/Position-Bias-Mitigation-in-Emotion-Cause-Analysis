@@ -9,6 +9,7 @@ import pickle as pk
 from sklearn.metrics import precision_score, recall_score, f1_score
 import pdb
 import json
+import tensorflow as tf
 
 def load_w2v(embedding_dim, embedding_dim_pos, train_file_path, embedding_path):
     print('\nload embedding...')

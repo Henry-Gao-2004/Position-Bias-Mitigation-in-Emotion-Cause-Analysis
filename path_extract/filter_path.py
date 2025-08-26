@@ -142,9 +142,9 @@ for paths in path_data_list:
 print(len(filtered_paths),filtered_paths[0])
 with open("path_data_1120_num15.txt", "wb") as pkl_file:
     pickle.dump(filtered_paths, pkl_file)
-with open("path_num_data.txt", "wb") as pkl_file:
+with open("data/path_num_data.txt", "wb") as pkl_file:
     pickle.dump(path_num_list, pkl_file)
-with open("path_len_data.txt", "wb") as pkl_file:
+with open("data/path_len_data.txt", "wb") as pkl_file:
     pickle.dump(path_len, pkl_file)
 
 

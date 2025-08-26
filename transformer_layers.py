@@ -84,8 +84,7 @@ def multihead_attention(queries,
         outputs *= query_masks  # broadcasting. (N, T_q, C)
 
         # Dropouts
-        outputs = tf.layers.dropout(
-            outputs, rate=dropout_rate, training=tf.convert_to_tensor(is_training))
+        outputs = tf.keras.layers.Dropout(rate=dropout_rate)(outputs, training=is_training)
         # Weighted sum
         outputs = tf.matmul(outputs, V_)  # ( h*N, T_q, C/h)
         # Restore shape

@@ -138,9 +138,9 @@ def feedforward(inputs,
 
 
 def feedforward_1(inputs, num_units, out_units):
-    u1 = tf.layers.dense(inputs, num_units, use_bias=True)  # (N, T_q, C)
+    u1 = tf.keras.layers.Dense(num_units, use_bias=True)(inputs)  # (N, T_q, C)
     u2 = tf.nn.relu(u1)
-    outputs = tf.layers.dense(u2, out_units, use_bias=True)
+    outputs = tf.keras.layers.Dense(out_units, use_bias=True)(u2)
     # outputs += values  # 加上value(不拼距离)
 
     # u1 = tf.layers.dense(inputs, num_units, use_bias=True)  # (N, T_q, C)

@@ -48,7 +48,7 @@ def multihead_attention(queries,
     Returns
       A 3d tensor with shape of (N, T_q, C)
     '''
-    with tf.variable_scope(scope):
+    with tf.compat.v1.variable_scope(scope):
         # Linear projections
         Q = tf.layers.dense(queries, units_query, activation=tf.nn.relu)  # (N, T_q, C)
         K = tf.layers.dense(keys, units_query, activation=tf.nn.relu)  # (N, T_k, C)

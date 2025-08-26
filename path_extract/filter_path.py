@@ -130,7 +130,7 @@ def en2ch_path(en_path):
         idx +=1
     return path
 
-path_file = open("path_data_1120_num15.txt",'wb')
+path_file = open("path_data_1120_num15.txt",'w')
 
 filtered_paths = []
 for paths in path_data_list:

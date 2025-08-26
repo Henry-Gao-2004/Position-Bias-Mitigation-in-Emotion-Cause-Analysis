@@ -120,7 +120,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         dmask = tf.cast(tf.not_equal(path_len_op, 0), tf.float32)
         dmask = tf.expand_dims(dmask,-1) #[?,X,L,1] 
         attention_weight = mask_logits(dot_prod, dmask)  # (N,X, L ,1)
-        attention = tf.nn.softmax(attention_weight, dim=2)  # (N, X,L, 1)
+        attention = tf.nn.softmax(attention_weight, axis=2)  # (N, X, L, 1)
         att_path = tf.matmul(tf.transpose(feature,[0,1,3,2]), attention)  # (N,X, D, 1)
         att_path = tf.squeeze(att_path,-1) #[N,X,D]
 

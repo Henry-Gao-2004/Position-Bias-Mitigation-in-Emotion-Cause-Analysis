@@ -376,6 +376,8 @@ def path_GCN(hidden_tensor, path_data, adj, emotion_pos,hidden_mask,scope_var):
 
         hidden_tensors = tf.expand_dims(hidden_tensor,1)
 
+        hidden_tensors = tf.expand_dims(hidden_tensor, axis=1)  # Ensure proper dimensions for matmul
+        adjacency_tensor = tf.cast(adjacency_tensor, tf.float32)  # Ensure dtype compatibility
         update = tf.reduce_sum(tf.matmul(adjacency_tensor, hidden_tensors), axis=1) + tf.keras.layers.Dense(units=hidden_tensor.shape[-1])(hidden_tensor) * tf.expand_dims(hidden_mask, -1)
 
         att = tf.layers.dense(tf.concat((update, hidden_tensor), -1), units=hidden_tensor.shape[-1],

@@ -48,10 +48,9 @@ def load_data(edge_type=None):
             adj_matrix[0, emo_pos[doc_id],row] = 1 #k-edge  
         adj_.append(adj_matrix)
     adj = np.array(adj_)
-    print(x.shape)
 
     #use relative/absolute position
-    relative_pos = pk.load(open(path + 'relative_pos.txt', 'rb'))
+    relative_pos = pk.load(open(path + 'label_pos_arr.txt', 'rb'))
     # relative_pos = pk.load(open(path + 'absolute_pos_new.txt', 'rb'))
 
     print('x.shape {} \ny.shape {} \nsen_len.shape {} \ndoc_len.shape {}\nrelative_pos.shape '

@@ -9,7 +9,7 @@ def normalize(inputs,
               epsilon=1e-8,
               scope="ln",
               reuse=None):
-    with tf.variable_scope(scope, reuse=reuse):
+    with tf.compat.v1.variable_scope(scope, reuse=reuse):
         inputs_shape = inputs.get_shape()
         params_shape = inputs_shape[-1:]
 

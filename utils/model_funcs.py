@@ -84,7 +84,7 @@ def batch_index(length, batch_size, test=False):
 
 
 def get_weight_varible(name, shape):
-    return tf.get_variable(name, shape, tf.float32, xavier_initializer())
+    return tf.Variable(tf.keras.initializers.GlorotUniform()(shape), name=name, dtype=tf.float32)
 
 
 def getmask(length, max_len, out_shape):

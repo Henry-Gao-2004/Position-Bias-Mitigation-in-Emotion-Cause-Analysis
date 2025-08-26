@@ -13,7 +13,7 @@ def normalize(inputs,
         inputs_shape = inputs.get_shape()
         params_shape = inputs_shape[-1:]
 
-        mean, variance = tf.nn.moments(inputs, [-1], keep_dims=True)
+        mean, variance = tf.nn.moments(inputs, axes=[-1], keepdims=True)
         beta = tf.Variable(tf.zeros(params_shape))
         gamma = tf.Variable(tf.ones(params_shape))
         normalized = (inputs - mean) / ((variance + epsilon) ** (.5))

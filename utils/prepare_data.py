@@ -45,7 +45,8 @@ def load_w2v(embedding_dim, embedding_dim_pos, train_file_path, embedding_path):
     embedding_pos = [list(np.zeros(embedding_dim_pos))]
     embedding_pos.extend( [list(np.random.normal(loc=0.0, scale=0.1, size=embedding_dim_pos)) for i in range(-68,34)] )
 
-    embedding, embedding_pos = np.array(embedding, dtype=tf.float32), np.array(embedding_pos, dtype=tf.float32)
+    embedding = np.array(embedding, dtype=np.float32)
+    embedding_pos = np.array(embedding_pos, dtype=np.float32)
     
     print("embedding.shape: {} embedding_pos.shape: {}".format(embedding.shape, embedding_pos.shape))
     print("load embedding done!\n")

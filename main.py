@@ -117,7 +117,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         expand_Q = tf.expand_dims(Q,-1)
         feature = pathSenEncode
         dot_prod = tf.matmul(feature,expand_Q) #[?,X,L,1]
-        dmask = tf.to_float(tf.zeros_like(path_len_op)!=path_len_op)
+        dmask = tf.cast(tf.not_equal(path_len_op, 0), tf.float32)
         dmask = tf.expand_dims(dmask,-1) #[?,X,L,1] 
         attention_weight = mask_logits(dot_prod, dmask)  # (N,X, L ,1)
         attention = tf.nn.softmax(attention_weight, dim=2)  # (N, X,L, 1)

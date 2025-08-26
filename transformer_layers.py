@@ -50,9 +50,9 @@ def multihead_attention(queries,
     '''
     with tf.compat.v1.variable_scope(scope):
         # Linear projections
-        Q = tf.layers.dense(queries, units_query, activation=tf.nn.relu)  # (N, T_q, C)
-        K = tf.layers.dense(keys, units_query, activation=tf.nn.relu)  # (N, T_k, C)
-        V = tf.layers.dense(values, units_query, activation=tf.nn.relu)  # (N, T_k, C)
+        Q = tf.keras.layers.Dense(units_query, activation=tf.nn.relu)(queries)  # (N, T_q, C)
+        K = tf.keras.layers.Dense(units_query, activation=tf.nn.relu)(keys)  # (N, T_k, C)
+        V = tf.keras.layers.Dense(units_query, activation=tf.nn.relu)(values)  # (N, T_k, C)
         # Q = tf.layers.dense(queries, units_query, activation=tf.nn.swish)  # (N, T_q, C)
         # K = tf.layers.dense(keys, units_query, activation=tf.nn.swish)  # (N, T_k, C)
         # V = tf.layers.dense(values, units_query, activation=tf.nn.swish)  # (N, T_k, C)

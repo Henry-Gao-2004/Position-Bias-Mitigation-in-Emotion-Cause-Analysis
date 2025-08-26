@@ -6,6 +6,7 @@ import collections
 import re
 from nltk.stem.snowball import SnowballStemmer
 import json
+import pickle5 as pickle
 
 
 stemmer = SnowballStemmer("english")
@@ -130,16 +131,16 @@ def en2ch_path(en_path):
         idx +=1
     return path
 
-path_file = open("path_data_1120_num15.txt",'w')
 
 filtered_paths = []
 for paths in path_data_list:
     filtered_paths.append(return_top10_paths(paths))
-    for line in return_top10_paths(paths):
-        path_file.writelines(" ".join(line)+'\n')
+    # for line in return_top10_paths(paths):
+    #     path_file.writelines(" ".join(line)+'\n')
 
 print(len(filtered_paths),filtered_paths[0])
-path_file.close()
+with open("path_data_1120_num15.txt", "wb") as pkl_file:
+    pickle.dump(filtered_paths, pkl_file)
 
 
 

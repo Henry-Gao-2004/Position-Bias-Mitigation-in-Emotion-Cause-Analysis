@@ -223,16 +223,20 @@ def run():
             tr_word_dis = word_distance[train]
             tr_adj_data = adj[train]
             tr_emotion_pos = emotion_pos_data[train]
-            print(len(emotion_pos_data))
-            print(len(path_data))
-            print(emotion_pos_data[:5])
-            print(path_data[:5])
-            tr_path = path_data[train]
+            tr_path = path_data[train,:]
             tr_path_num = path_num_data[train]
             tr_path_len = path_len_data[train]
 
-            te_x, te_y, te_sen_len, te_doc_len, te_word_dis, te_adj_data, te_emotion_pos,te_path, te_path_num, te_path_len = map(lambda x: x[test],
-            [x_data, y_data, sen_len_data, doc_len_data, word_distance, adj, emotion_pos_data, path_data, path_num_data, path_len_data])
+            te_x = x_data[test]
+            te_y = y_data[test]
+            te_sen_len = sen_len_data[test]
+            te_doc_len = doc_len_data[test]
+            te_word_dis = word_distance[test]
+            te_adj_data = adj[test]
+            te_emotion_pos = emotion_pos_data[test]
+            te_path = path_data[test,:]
+            te_path_num = path_num_data[test]
+            te_path_len = path_len_data[test]
 
             precision_list, recall_list, FF1_list = [], [], []
             pre_list, true_list, pre_list_prob = [], [], []

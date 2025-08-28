@@ -224,7 +224,7 @@ def run():
             tr_adj_data = adj[train]
             tr_emotion_pos = emotion_pos_data[train]
             tr_path = [path_data[i] for i in train]
-            tr_path_num = path_num_data[train]
+            tr_path_num = [path_num_data[i] for i in train]
             tr_path_len = path_len_data[train]
 
             te_x = x_data[test]
@@ -235,7 +235,7 @@ def run():
             te_adj_data = adj[test]
             te_emotion_pos = emotion_pos_data[test]
             te_path = [path_data[i] for i in test]
-            te_path_num = path_num_data[test]
+            te_path_num = [path_num_data[i] for i in test]
             te_path_len = path_len_data[test]
 
             precision_list, recall_list, FF1_list = [], [], []

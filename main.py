@@ -337,8 +337,11 @@ def print_training_info():
 
 def get_batch_data(x, y, sen_len, doc_len, word_dis, adj, emotion_pos,path, path_num, path_len,keep_prob1, keep_prob2, batch_size, test=False):
     for index in func.batch_index(len(y), batch_size, test):
+        temp_path = [path[i] for i in index]
+        temp_path_num = [path_num[i] for i in index]
+        temp_path_len = [path_len[i] for i in index]
         feed_list = [x[index], y[index], sen_len[index], doc_len[index], word_dis[index], adj[index],emotion_pos[index],
-                     path[index], path_num[index], path_len[index],keep_prob1, keep_prob2]
+                     temp_path, temp_path_num, temp_path_len,keep_prob1, keep_prob2]
         yield feed_list, len(index)
 
 def senEncode_softmax(s_senEncode, w_varible, b_varible, n_feature, doc_len):

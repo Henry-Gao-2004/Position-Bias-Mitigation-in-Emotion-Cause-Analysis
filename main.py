@@ -133,7 +133,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
     for i in range(FLAGS.n_hops):
         # senEncode_main, nodeatt= attpath_GCN(senEncode_main, att_path, adj, emotion_pos, nodes_mask,doc_len)
         senEncode_main= path_GCN(senEncode_main, att_path, adj, emotion_pos, nodes_mask, str(i)+"glayer")
-        senEncode_main = tf.nn.dropout(senEncode_main, keep_prob=keep_prob2)
+        senEncode_main = tf.nn.dropout(senEncode_main, rate=1-keep_prob2)
 
 
     #concate the hidden tensors and the emotion hidden tensors

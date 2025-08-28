@@ -203,7 +203,7 @@ def run():
     tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
 
-    tf.set_random_seed(1234)
+    tf.random.set_seed(1234)
     test_splits_doc, test_splits_y, test_splits_pre =[],[],[]
     with tf.Session(config=tf_config) as sess:
         kf, fold, SID = KFold(n_splits=10, shuffle=True), 1, 0

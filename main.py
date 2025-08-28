@@ -184,7 +184,7 @@ def run():
     with tf.name_scope('loss'):
         epsilon = 1e-4
         valid_num = tf.cast(tf.reduce_sum(doc_len), dtype=tf.float32)
-        loss_op = - tf.reduce_sum(y * tf.log(pred+epsilon)) / valid_num + reg * FLAGS.l2_reg
+        loss_op = - tf.reduce_sum(y * tf.math.log(pred + epsilon)) / valid_num + reg * FLAGS.l2_reg
 
     # Modified for learning rate decay
     global_step = tf.Variable(0, name='global_step', trainable=False)

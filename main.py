@@ -143,7 +143,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
     emotion_tensor = tf.gather_nd(senEncode_main,emotion_idx)#[bs,out_units]
     emotion_tensors = tf.stack([emotion_tensor for _ in range(senEncode_main.shape[1])],1) #[?,doc_len,out_units]
 
-    emotion_tensors = tf.nn.dropout(emotion_tensors, keep_prob=keep_prob2)
+    emotion_tensors = tf.nn.dropout(emotion_tensors, rate=1-keep_prob2)
     emotional_nodes = tf.concat([senEncode_main,emotion_tensors],-1)
     '''Predict the label'''
     pred, reg = senEncode_softmax(emotional_nodes, 'softmax_w', 'softmax_b', 2*out_units, doc_len)  # senEnc

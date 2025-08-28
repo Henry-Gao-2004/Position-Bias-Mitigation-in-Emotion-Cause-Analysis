@@ -223,6 +223,7 @@ def run():
             tr_word_dis = word_distance[train]
             tr_adj_data = adj[train]
             tr_emotion_pos = emotion_pos_data[train]
+            print(path_data.shape)
             tr_path = path_data[train]
             tr_path_num = path_num_data[train]
             tr_path_len = path_len_data[train]

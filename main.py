@@ -177,7 +177,7 @@ def run():
     path_data_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num, FLAGS.max_path_len]) 
     path_num_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len])
     path_len_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num])
-    placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
+    placeholders = [x, y, sen_len, tf.compat.v1.placeholder(tf.int32, [None]), word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
     #build graph
     pred, reg, att_path, path_rep = kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj_tensor,emotion_pos, pos_embedding, path_data_op,path_len_op,keep_prob1, keep_prob2)
 

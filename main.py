@@ -191,7 +191,8 @@ def run():
     add_global_op = global_step.assign_add(1)
 
     with tf.name_scope('train'):
-        optimizer = tf.train.AdamOptimizer(learning_rate=FLAGS.lr_main).minimize(loss_op)
+        optimizer = tf.keras.optimizers.Adam(learning_rate=FLAGS.lr_main)
+        train_op = optimizer.get_updates(loss_op, tf.compat.v1.trainable_variables())
     true_y_op = tf.argmax(y, 2)
     pred_y_op = tf.argmax(pred, 2)
 

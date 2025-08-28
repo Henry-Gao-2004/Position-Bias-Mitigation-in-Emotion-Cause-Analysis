@@ -243,7 +243,7 @@ def run():
 
             Id_2.append(test)
             global_step = tf.Variable(0, name="global_step", trainable=False)
-            sess.run(tf.global_variables_initializer()) 
+            sess.run(tf.compat.v1.global_variables_initializer())
             print('############# fold {} ###############'.format(fold))
             fold += 1
             max_f1 = -1

@@ -380,8 +380,9 @@ def path_GCN(hidden_tensor, path_data, adj, emotion_pos,hidden_mask,scope_var):
 
         update = tf.reduce_sum(tf.matmul(adjacency_tensor, hidden_tensors), 1) + temp1
 
-        att = tf.layers.dense(tf.concat((update, hidden_tensor), -1), units=units,
-                              activation=tf.nn.sigmoid) * tf.expand_dims(hidden_mask, -1)
+        att = tf.keras.layers.Dense(units=units, activation='sigmoid')(
+            tf.concat([update, hidden_tensor], axis=-1)
+        ) * tf.expand_dims(hidden_mask, -1)
 
         output = att * tf.nn.tanh(update) + (1 - att) * hidden_tensor
         return output

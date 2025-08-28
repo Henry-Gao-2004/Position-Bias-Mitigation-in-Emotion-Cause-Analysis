@@ -50,7 +50,7 @@ def load_data(edge_type=None):
     adj = np.array(adj_)
 
     #use relative/absolute position
-    relative_pos = pk.load(open(path + 'DGL.txt', 'rb'))
+    relative_pos = pk.load(open(path + 'word_distance.txt', 'rb'))
     # relative_pos = pk.load(open(path + 'absolute_pos_new.txt', 'rb'))
 
     print('x.shape {} \ny.shape {} \nsen_len.shape {} \ndoc_len.shape {}\nrelative_pos.shape '

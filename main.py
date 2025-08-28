@@ -169,7 +169,7 @@ def run():
     y = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.n_class], name = "y")
     sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len], name = "sen_len")
     doc_len = tf.compat.v1.placeholder(tf.int32, [None], name = "doc_len")
-    word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, 75], name = "word_dis")
+    word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len], name = "word_dis")
     keep_prob1 = tf.compat.v1.placeholder(tf.float32, name = "keep_prob1")
     keep_prob2 = tf.compat.v1.placeholder(tf.float32, name = "keep_prob2")
     emotion_pos = tf.compat.v1.placeholder(tf.int32, [None], name = "emotion_pos")

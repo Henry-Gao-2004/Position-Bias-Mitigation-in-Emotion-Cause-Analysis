@@ -326,7 +326,7 @@ def get_batch_data(x, y, sen_len, doc_len, word_dis, adj, emotion_pos,path, path
 
 def senEncode_softmax(s_senEncode, w_varible, b_varible, n_feature, doc_len):
     s = tf.reshape(s_senEncode, [-1, n_feature])
-    s = tf.nn.dropout(s, keep_prob=FLAGS.keep_prob2)
+    s = tf.nn.dropout(s, rate=1 - FLAGS.keep_prob2)
     w = func.get_weight_varible(w_varible, [n_feature, FLAGS.n_class])
     b = func.get_weight_varible(b_varible, [FLAGS.n_class])
     pred = tf.matmul(s, w) + b

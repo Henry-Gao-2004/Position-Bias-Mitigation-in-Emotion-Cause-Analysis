@@ -222,9 +222,11 @@ def run():
             tr_doc_len = doc_len_data[train]
             tr_word_dis = word_distance[train]
             tr_adj_data = adj[train]
-            print(len(emotion_pos_data))
             tr_emotion_pos = emotion_pos_data[train]
+            print(len(emotion_pos_data))
             print(len(path_data))
+            print(emotion_pos_data[:5])
+            print(path_data[:5])
             tr_path = path_data[train]
             tr_path_num = path_num_data[train]
             tr_path_len = path_len_data[train]

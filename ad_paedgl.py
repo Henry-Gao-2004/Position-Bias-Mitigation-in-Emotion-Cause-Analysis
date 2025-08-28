@@ -238,8 +238,6 @@ def train_adv(model=None):
             print("The n_split is %d"%(n_split))
             best_dev_f1 = 0.0
             best_attack_f1 = 0.0
-            print(type(train))
-            exit()
             tr_x, tr_y, tr_y_p, tr_sen_len, tr_doc_len, tr_word_dis, tr_DGL, tr_label_pos, tr_emotion_pos = map(lambda x: x[train],
             [x_data, y_data, y_p_data, sen_len_data, doc_len_data, word_distance, DGL_data, label_pos_data, emotion_pos_data])
 

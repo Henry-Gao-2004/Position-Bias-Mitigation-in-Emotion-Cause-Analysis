@@ -210,7 +210,7 @@ def run():
         Id = []
         Id_2 = []
         p_list, r_list, f1_list = [], [], []
-        parameter_num = np.sum([np.prod(v.get_shape().as_list()) for v in tf.trainable_variables()])
+        parameter_num = np.sum([np.prod(v.shape.as_list()) for v in tf.compat.v1.trainable_variables()])
         print(parameter_num)
         split_num = 0
         for train, test in kf.split(x_data):

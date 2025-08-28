@@ -216,14 +216,16 @@ def run():
         for train, test in kf.split(x_data):
             split_num += 1
             print("Split:%d/10"%split_num)
-            train = np.array(train, dtype=int).flatten()
-            print("train dtype:", train.dtype)
-            print("Any NaN?", np.isnan(train).any())
-            print("All finite?", np.isfinite(train).all())
-            print(train.shape)
             tr_x = x_data[train]
-            tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos, tr_path, tr_path_num, tr_path_len = map(lambda x: x[train],
-            [y_data, sen_len_data, doc_len_data, word_distance, adj, emotion_pos_data, path_data, path_num_data, path_len_data])
+            tr_y = y_data[train]
+            tr_sen_len = sen_len_data[train]
+            tr_doc_len = doc_len_data[train]
+            tr_word_dis = word_distance[train]
+            tr_adj_data = adj[train]
+            tr_emotion_pos = emotion_pos_data[train]
+            tr_path = path_data[train]
+            tr_path_num = path_num_data[train]
+            tr_path_len = path_len_data[train]
 
             te_x, te_y, te_sen_len, te_doc_len, te_word_dis, te_adj_data, te_emotion_pos,te_path, te_path_num, te_path_len = map(lambda x: x[test],
             [x_data, y_data, sen_len_data, doc_len_data, word_distance, adj, emotion_pos_data, path_data, path_num_data, path_len_data])

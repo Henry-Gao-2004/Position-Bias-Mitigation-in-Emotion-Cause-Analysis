@@ -200,7 +200,7 @@ def run():
     print('build model done!\n')
     prob_list_pr, y_label = [], []
     print_training_info()
-    tf_config = tf.ConfigProto()
+    tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
 
     tf.set_random_seed(1234)

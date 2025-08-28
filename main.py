@@ -165,19 +165,19 @@ def run():
     print('build model...')
     start_time = time.time()
     #create placeholders
-    x = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
-    y = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.n_class])
-    sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len])
-    doc_len = tf.compat.v1.placeholder(tf.int32, [None])
-    word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len])
-    keep_prob1 = tf.compat.v1.placeholder(tf.float32)
-    keep_prob2 = tf.compat.v1.placeholder(tf.float32)
-    emotion_pos = tf.compat.v1.placeholder(tf.int32, [None])
-    adj_tensor = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.edge_type, FLAGS.max_doc_len, FLAGS.max_doc_len])
-    path_data_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num, FLAGS.max_path_len]) 
-    path_num_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len])
-    path_len_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num])
-    placeholders = [x, y, sen_len, tf.compat.v1.placeholder(tf.int32, [None]), word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
+    x = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len], name = "x")
+    y = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.max_doc_len, FLAGS.n_class], name = "y")
+    sen_len = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len], name = "sen_len")
+    doc_len = tf.compat.v1.placeholder(tf.int32, [None], name = "doc_len")
+    word_dis = tf.compat.v1.placeholder(tf.int32, [None, FLAGS.max_doc_len, FLAGS.max_sen_len], name = "word_dis")
+    keep_prob1 = tf.compat.v1.placeholder(tf.float32, name = "keep_prob1")
+    keep_prob2 = tf.compat.v1.placeholder(tf.float32, name = "keep_prob2")
+    emotion_pos = tf.compat.v1.placeholder(tf.int32, [None], name = "emotion_pos")
+    adj_tensor = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.edge_type, FLAGS.max_doc_len, FLAGS.max_doc_len], name = "adj_tensor")
+    path_data_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num, FLAGS.max_path_len], name = "path_data_op") 
+    path_num_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len], name = "path_num_op")
+    path_len_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num], name = "path_len_op")
+    placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
     #build graph
     pred, reg, att_path, path_rep = kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj_tensor,emotion_pos, pos_embedding, path_data_op,path_len_op,keep_prob1, keep_prob2)
 

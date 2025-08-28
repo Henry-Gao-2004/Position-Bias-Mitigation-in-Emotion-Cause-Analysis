@@ -370,15 +370,14 @@ def GCNLayer2(hidden_tensor, path_data, adj, emotion_pos,hidden_mask,scope_var):
 def path_GCN(hidden_tensor, path_data, adj, emotion_pos,hidden_mask,scope_var):
         adjacency_tensor = adj
         path_hidden = tf.concat([hidden_tensor,path_data],axis = -1)
-        path_hidden = tf.keras.layers.Dense(units=int(hidden_tensor.shape[-1]))(path_hidden)
+        path_hidden = tf.keras.layers.Dense(units=hidden_tensor.shape[-1])(path_hidden)
 
         # hidden_tensors = tf.stack([tf.layers.dense(inputs=hidden_tensor, units=hidden_tensor.shape[-1]),path_hidden],1)*tf.expand_dims(tf.expand_dims(hidden_mask, -1), 1)
 
         hidden_tensors = tf.expand_dims(hidden_tensor,1)
+        temp1 = tf.layers.dense(hidden_tensor, units=hidden_tensor.shape[-1]) * tf.expand_dims(hidden_mask, -1)
 
-        hidden_tensors = tf.expand_dims(hidden_tensor, axis=1)  # Ensure proper dimensions for matmul
-        adjacency_tensor = tf.cast(adjacency_tensor, tf.float32)  # Ensure dtype compatibility
-        update = tf.reduce_sum(tf.matmul(adjacency_tensor, hidden_tensors), axis=1) + tf.keras.layers.Dense(units=hidden_tensor.shape[-1])(hidden_tensor) * tf.expand_dims(hidden_mask, -1)
+        update = tf.reduce_sum(tf.matmul(adjacency_tensor, hidden_tensors), 1) + temp1
 
         att = tf.layers.dense(tf.concat((update, hidden_tensor), -1), units=hidden_tensor.shape[-1],
                               activation=tf.nn.sigmoid) * tf.expand_dims(hidden_mask, -1)

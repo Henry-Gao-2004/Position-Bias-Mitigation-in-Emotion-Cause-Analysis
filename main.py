@@ -275,7 +275,8 @@ def run():
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
                     train[7] = tf.ragged.constant(train[7])
-                    train[7] = train[7].to_tensor(default_value="0", shape=[64,71,10,7])
+                    print(train[7].shape)
+                    train[7] = train[7].to_tensor(default_value="0", shape=[FLAGS.batch_size,71,10,7])
 
                     
                     print(len(train[7]))

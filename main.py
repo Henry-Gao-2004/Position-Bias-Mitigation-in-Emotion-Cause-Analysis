@@ -174,7 +174,7 @@ def run():
     keep_prob2 = tf.compat.v1.placeholder(tf.float32, name = "keep_prob2")
     emotion_pos = tf.compat.v1.placeholder(tf.int32, [None], name = "emotion_pos")
     adj_tensor = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.edge_type, FLAGS.max_doc_len, FLAGS.max_doc_len], name = "adj_tensor")
-    path_data_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num, FLAGS.max_path_len], name = "path_data_op") 
+    path_data_op = tf.compat.v1.placeholder(tf.string, [None, FLAGS.max_doc_len, FLAGS.max_path_num, FLAGS.max_path_len], name = "path_data_op")
     path_num_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len], name = "path_num_op")
     path_len_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num], name = "path_len_op")
     placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
@@ -259,7 +259,7 @@ def run():
                 valid_loss = []
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
-                    train[7] = [tf.keras.preprocessing.sequence.pad_sequences(doc, maxlen=FLAGS.max_path_len, padding='post', value=0) for doc in train[7]]
+                    train[7] = [tf.keras.preprocessing.sequence.pad_sequences(doc, maxlen=FLAGS.max_path_len, padding='post', value="0") for doc in train[7]]
                     print(train[7])
                     _ = sess.run(optimizer,feed_dict=dict(zip(placeholders, train)))
                     loss = sess.run(loss_op,feed_dict=dict(zip(placeholders, train)))

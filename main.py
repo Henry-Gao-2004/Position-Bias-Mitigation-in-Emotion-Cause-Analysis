@@ -25,7 +25,7 @@ tf.compat.v1.app.flags.DEFINE_integer('embedding_dim_pos', 50, 'dimension of pos
 # input shape ##
 tf.compat.v1.app.flags.DEFINE_integer('max_doc_len', 75, 'max number of tokens per documents')
 tf.compat.v1.app.flags.DEFINE_integer('max_sen_len', 45, 'max number of tokens per sentence')
-tf.compat.v1.app.flags.DEFINE_integer('max_path_num', 10, 'max number of paths per sentence')
+tf.compat.v1.app.flags.DEFINE_integer('max_path_num', 15, 'max number of paths per sentence')
 tf.compat.v1.app.flags.DEFINE_integer('max_path_len', 7, 'max number of tokens per path')
 # >>>>>>>>>>>>>>>>>>>> For Data <<<<<<<<<<<<<<<<<<<< #
 tf.compat.v1.app.flags.DEFINE_string('log_file_name', '', 'name of log file')
@@ -189,7 +189,7 @@ def run():
     keep_prob2 = tf.compat.v1.placeholder(tf.float32, name = "keep_prob2")
     emotion_pos = tf.compat.v1.placeholder(tf.int32, [None], name = "emotion_pos")
     adj_tensor = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.edge_type, FLAGS.max_doc_len, FLAGS.max_doc_len], name = "adj_tensor")
-    path_data_op = tf.compat.v1.placeholder(tf.string, [None, FLAGS.max_doc_len, FLAGS.max_path_num, FLAGS.max_path_len], name = "path_data_op")
+    path_data_op = tf.compat.v1.placeholder(tf.string, [None, FLAGS.max_path_num, FLAGS.max_path_len], name = "path_data_op")
     path_num_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len], name = "path_num_op")
     path_len_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num], name = "path_len_op")
     placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
@@ -366,7 +366,6 @@ def print_training_info():
 def get_batch_data(x, y, sen_len, doc_len, word_dis, adj, emotion_pos,path, path_num, path_len,keep_prob1, keep_prob2, batch_size, test=False):
     for index in func.batch_index(len(y), batch_size, test):
         temp_path = [path[i] for i in index]
-        print(len(temp_path), len(temp_path[0]), len(temp_path[0][0]), len(temp_path[0][0][0]), len(temp_path[0][0][0][0][0][0][0]))
         temp_path = tf.ragged.constant(temp_path)
         print(temp_path.shape)
         temp_path_num = [path_num[i] for i in index]

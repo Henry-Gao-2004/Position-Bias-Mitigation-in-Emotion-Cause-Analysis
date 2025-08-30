@@ -215,9 +215,7 @@ def run():
     add_global_op = global_step.assign_add(1)
 
     with tf.name_scope('train'):
-        optimizer = tf.keras.optimizers.Adam(learning_rate=FLAGS.lr_main)
-        gradients = tf.gradients(loss_op, tf.compat.v1.trainable_variables())
-        optimizer = optimizer.apply_gradients(zip(gradients, tf.compat.v1.trainable_variables()))
+        optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=FLAGS.lr_main).minimize(loss_op)
     true_y_op = tf.argmax(y, 2)
     pred_y_op = tf.argmax(pred, 2)
 
@@ -284,7 +282,7 @@ def run():
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
                     train[7] = pad3d_str_np(train[7])
-                    tf.config.run_functions_eagerly(True)
+                    
                     _ = sess.run(optimizer,feed_dict=dict(zip(placeholders, train)))
                     loss = sess.run(loss_op,feed_dict=dict(zip(placeholders, train)))
                     pred_y = sess.run(pred_y_op,feed_dict=dict(zip(placeholders, train)))
@@ -515,4 +513,5 @@ def main(_):
 
 
 if __name__ == '__main__':
+    tf.compat.v1.disable_v2_behavior()
     tf.compat.v1.app.run()

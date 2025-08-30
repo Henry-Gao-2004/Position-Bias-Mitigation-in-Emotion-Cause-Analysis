@@ -5,6 +5,7 @@
 @email: hanqi.yan@warwick.ac.uk
 '''
 
+import json
 import numpy as np
 import pickle as pk
 import transformer_layers as trans
@@ -93,6 +94,22 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
     #path encoding ##
     with tf.name_scope('path_word_encoder'):
         print("path data:",path_data_op)
+        
+        with open('data/word2idx.txt', 'r', encoding='utf-8') as json_file: 
+            word2idx = json.load(json_file)
+        path_data_op = tf.map_fn(
+            lambda doc: tf.map_fn(
+            lambda path: tf.map_fn(
+                lambda word: word2idx.get(word.decode('utf-8'), word2idx.get('<UNK>')),
+                path,
+                dtype=tf.int32
+            ),
+            doc,
+            dtype=tf.int32
+            ),
+            path_data_op,
+            dtype=tf.int32
+        )
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
         path_inputs = tf.reshape(path_data_op, [-1, FLAGS.max_path_len, FLAGS.embedding_dim])
         sh2 = 2 * FLAGS.n_hidden

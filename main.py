@@ -51,6 +51,7 @@ tf.compat.v1.app.flags.DEFINE_integer('n_hops', 1, 'the layers of transformer be
 tf.compat.v1.app.flags.DEFINE_float('keep_prob2', 1.0, 'GCN layer dropout keep prob') # graph 出来以后的结果
 tf.compat.v1.app.flags.DEFINE_integer('edge_type', 1, '2 for s-edge and k-edge, 3 for extra r-edge')
 
+tf.config.run_functions_eagerly(True)
 
 def mask_logits(target, mask):
     return target * mask + (1 - mask) * (-1e30)

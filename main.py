@@ -104,7 +104,8 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
             initializer=tf.lookup.KeyValueTensorInitializer(keys, values),
             default_value=0  # OOV
         )
-        tf.compat.v1.tables_initializer().run()
+        with tf.compat.v1.Session() as sess:
+            sess.run(tf.compat.v1.tables_initializer())
         path_data_op = table.lookup(path_data_op)
 
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)

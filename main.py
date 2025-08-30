@@ -226,7 +226,6 @@ def run():
     print_training_info()
     tf_config = tf.compat.v1.ConfigProto()
     tf_config.gpu_options.allow_growth = True
-    tf.compat.v1.disable_eager_execution() 
 
     tf.random.set_seed(1234)
     test_splits_doc, test_splits_y, test_splits_pre =[],[],[]
@@ -285,6 +284,7 @@ def run():
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
                     train[7] = pad3d_str_np(train[7])
+                    tf.config.run_functions_eagerly(True)
                     _ = sess.run(optimizer,feed_dict=dict(zip(placeholders, train)))
                     loss = sess.run(loss_op,feed_dict=dict(zip(placeholders, train)))
                     pred_y = sess.run(pred_y_op,feed_dict=dict(zip(placeholders, train)))
@@ -515,5 +515,4 @@ def main(_):
 
 
 if __name__ == '__main__':
-    tf.compat.v1.disable_v2_behavior()
     tf.compat.v1.app.run()

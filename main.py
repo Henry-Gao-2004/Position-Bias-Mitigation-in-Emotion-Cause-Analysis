@@ -274,15 +274,9 @@ def run():
                 valid_loss = []
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
-                    train[7] = tf.keras.preprocessing.sequence.pad_sequences(
-                        [tf.keras.preprocessing.sequence.pad_sequences(
-                            [tf.keras.preprocessing.sequence.pad_sequences(
-                                path, maxlen=FLAGS.max_path_len, padding='post', truncating='post'
-                            ) for path in doc
-                        ], maxlen=FLAGS.max_path_num, padding='post', truncating='post'
-                        ) for doc in train[7]
-                    ], maxlen=FLAGS.max_doc_len, padding='post', truncating='post'
-                    )
+                    train[7] = tf.ragged.constant(train[7])
+                    train[7] = train[7].to_tensor(default_value="0", shape=[64,71,10,7])
+
                     
                     print(len(train[7]))
                     print(len(train[7][0]))

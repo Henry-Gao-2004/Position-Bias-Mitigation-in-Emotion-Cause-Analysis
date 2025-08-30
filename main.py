@@ -97,8 +97,11 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         
         with open('data/word2idx.txt', 'r', encoding='utf-8') as json_file: 
             word2idx = json.load(json_file)
-        word2idx_func = np.vectorize(lambda x: word2idx.get(x, 0))  # 0 for OOV
-        path_data_op = word2idx_func(path_data_op)
+        
+        flat = path_data_op.flatten()
+        mapped = np.array([word2idx.get(w, 0) for w in flat], dtype=np.int64) 
+        path_data_op = mapped.reshape(path_data_op.shape)
+
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
         path_inputs = tf.reshape(path_data_op, [-1, FLAGS.max_path_len, FLAGS.embedding_dim])
         sh2 = 2 * FLAGS.n_hidden

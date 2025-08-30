@@ -98,16 +98,39 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         with open('data/word2idx.txt', 'r', encoding='utf-8') as json_file: 
             word2idx = json.load(json_file)
         def words_to_ids(words_tensor):
-            """Convert words tensor to IDs using word2idx mapping"""
+            """Convert Chinese words tensor to IDs using word2idx mapping"""
             def py_map_words(words):
-                # Convert tensor to numpy, then to list of strings
-                words_list = words.numpy().astype(str).tolist()
+                # Convert tensor to numpy
+                words_np = words.numpy()
+                
+                # Handle different string formats
+                words_list = []
+                for word in words_np.flatten():
+                    if isinstance(word, bytes):
+                        # Decode bytes to string
+                        word_str = word.decode('utf-8')
+                    else:
+                        # Already a string
+                        word_str = str(word)
+                    
+                    # Handle Unicode escape sequences if they're literal strings
+                    try:
+                        # This will decode "\u4e2d" to actual Chinese characters
+                        word_decoded = word_str.encode().decode('unicode_escape')
+                        words_list.append(word_decoded)
+                    except:
+                        # If decoding fails, use the original string
+                        words_list.append(word_str)
+                
                 # Map words to IDs
                 ids = [word2idx.get(word, 0) for word in words_list]  # 0 for OOV
-                return tf.constant(ids, dtype=tf.int64)
+                
+                # Reshape to match input tensor shape
+                original_shape = words.shape
+                ids_array = tf.constant(ids, dtype=tf.int64)
+                return tf.reshape(ids_array, original_shape)
             
             return tf.py_function(py_map_words, [words_tensor], tf.int64)
-        path_data_op = words_to_ids(path_data_op)
 
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
         

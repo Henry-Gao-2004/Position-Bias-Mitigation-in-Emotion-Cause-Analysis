@@ -259,7 +259,7 @@ def run():
                 valid_loss = []
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
-                    train[7] = [tf.keras.preprocessing.sequence.pad_sequences(doc, maxlen=FLAGS.max_path_len, padding='post', value="0") for doc in train[7]]
+                    train[7] = [tf.keras.preprocessing.sequence.pad_sequences(doc, maxlen=FLAGS.max_path_len, padding='post', value=0) for doc in train[7]]
                     print(train[7])
                     _ = sess.run(optimizer,feed_dict=dict(zip(placeholders, train)))
                     loss = sess.run(loss_op,feed_dict=dict(zip(placeholders, train)))

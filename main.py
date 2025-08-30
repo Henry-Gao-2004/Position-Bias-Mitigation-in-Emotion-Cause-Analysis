@@ -51,7 +51,6 @@ tf.compat.v1.app.flags.DEFINE_integer('n_hops', 1, 'the layers of transformer be
 tf.compat.v1.app.flags.DEFINE_float('keep_prob2', 1.0, 'GCN layer dropout keep prob') # graph 出来以后的结果
 tf.compat.v1.app.flags.DEFINE_integer('edge_type', 1, '2 for s-edge and k-edge, 3 for extra r-edge')
 
-tf.config.run_functions_eagerly(True)
 
 def mask_logits(target, mask):
     return target * mask + (1 - mask) * (-1e30)
@@ -285,6 +284,7 @@ def run():
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
                     train[7] = pad3d_str_np(train[7])
+                    tf.config.run_functions_eagerly(True)
                     _ = sess.run(optimizer,feed_dict=dict(zip(placeholders, train)))
                     loss = sess.run(loss_op,feed_dict=dict(zip(placeholders, train)))
                     pred_y = sess.run(pred_y_op,feed_dict=dict(zip(placeholders, train)))

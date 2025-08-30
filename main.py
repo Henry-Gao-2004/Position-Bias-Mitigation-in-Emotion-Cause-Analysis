@@ -366,6 +366,10 @@ def print_training_info():
 def get_batch_data(x, y, sen_len, doc_len, word_dis, adj, emotion_pos,path, path_num, path_len,keep_prob1, keep_prob2, batch_size, test=False):
     for index in func.batch_index(len(y), batch_size, test):
         temp_path = [path[i] for i in index]
+        print(len(temp_path))
+        print(len(temp_path[0]))
+        print(len(temp_path[0][0]))
+        print(len(temp_path[0][0][0]))
         temp_path_num = [path_num[i] for i in index]
         temp_path_len = [path_len[i] for i in index]
         feed_list = [x[index], y[index], sen_len[index], doc_len[index], word_dis[index], adj[index],emotion_pos[index],

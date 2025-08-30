@@ -107,6 +107,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         path_data_op = table.lookup(path_data_op)
 
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
+        path_data_op = tf.cast(path_data_op, tf.int32)
         path_inputs = tf.reshape(path_data_op, [-1, FLAGS.max_path_len, FLAGS.embedding_dim])
         sh2 = 2 * FLAGS.n_hidden
         path_inputs = tf.nn.dropout(path_inputs, rate=1-keep_prob1)

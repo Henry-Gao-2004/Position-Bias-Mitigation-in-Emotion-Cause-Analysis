@@ -140,6 +140,11 @@ for paths in path_data_list:
         path_len.append(len(line))
 
 print(len(filtered_paths),filtered_paths[0])
+with open("filtered_paths.txt", "w", encoding="utf-8") as txt_file:
+    for paths in filtered_paths:
+        for path in paths:
+            txt_file.write(" ".join(path) + "\n")
+        txt_file.write("\n")
 with open("path_data_1120_num15.txt", "wb") as pkl_file:
     pickle.dump(filtered_paths, pkl_file)
 with open("data/path_num_data.txt", "wb") as pkl_file:

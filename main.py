@@ -55,7 +55,7 @@ def mask_logits(target, mask):
     return target * mask + (1 - mask) * (-1e30)
 
 def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, pos_embedding, path_data_op, path_len_op, keep_prob1, keep_prob2, RNN = func.biLSTM):
-    print(x)
+    print("x: ",x)
     x = tf.nn.embedding_lookup(word_embedding, x)
     inputs = tf.reshape(x, [-1, FLAGS.max_sen_len, FLAGS.embedding_dim])
     word_dis = tf.nn.embedding_lookup(pos_embedding, word_dis)
@@ -92,7 +92,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         doc_rep = func.emotion_attend(senEncode, doc_len, emotion_pos,w1,w2,b1)
     #path encoding ##
     with tf.name_scope('path_word_encoder'):
-        print(path_data_op)
+        print("path data:",path_data_op)
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
         path_inputs = tf.reshape(path_data_op, [-1, FLAGS.max_path_len, FLAGS.embedding_dim])
         sh2 = 2 * FLAGS.n_hidden
@@ -161,7 +161,6 @@ def run():
     x_data, y_data, sen_len_data, doc_len_data, word_distance, word_embedding, pos_embedding, adj, emotion_pos_data, path_data, path_num_data, path_len_data,id2word\
         = func.load_data(edge_type=FLAGS.edge_type)
     
-    print(word_embedding)
     word_embedding = tf.constant(word_embedding, dtype=tf.float32, name='word_embedding')
     pos_embedding = tf.constant(pos_embedding, dtype=tf.float32, name='pos_embedding')
     print('build model...')

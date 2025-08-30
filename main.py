@@ -199,7 +199,7 @@ def run():
     emotion_pos = tf.compat.v1.placeholder(tf.int32, [None], name = "emotion_pos")
     adj_tensor = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.edge_type, FLAGS.max_doc_len, FLAGS.max_doc_len], name = "adj_tensor")
     path_data_op = tf.compat.v1.placeholder(tf.string, [None, FLAGS.max_path_num, FLAGS.max_path_len], name = "path_data_op")
-    path_num_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len], name = "path_num_op")
+    path_num_op = tf.compat.v1.placeholder(tf.int32,[None], name = "path_num_op")
     path_len_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num], name = "path_len_op")
     placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
     #build graph

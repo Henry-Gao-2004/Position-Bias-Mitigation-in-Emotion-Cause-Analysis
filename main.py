@@ -131,6 +131,7 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
                 return tf.reshape(ids_array, original_shape)
             
             return tf.py_function(py_map_words, [words_tensor], tf.int64)
+        path_data_op = words_to_ids(path_data_op)
 
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
         

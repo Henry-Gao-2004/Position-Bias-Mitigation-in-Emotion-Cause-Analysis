@@ -274,14 +274,6 @@ def run():
                 valid_loss = []
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
-                    train[7] = tf.ragged.constant(train[7])
-                    print(train[7].shape)
-                    train[7] = train[7].to_tensor(default_value="0", shape=[FLAGS.batch_size,71,10,7])
-
-                    
-                    print(len(train[7]))
-                    print(len(train[7][0]))
-                    print(len(train[7][0][0]))
                     _ = sess.run(optimizer,feed_dict=dict(zip(placeholders, train)))
                     loss = sess.run(loss_op,feed_dict=dict(zip(placeholders, train)))
                     pred_y = sess.run(pred_y_op,feed_dict=dict(zip(placeholders, train)))
@@ -366,8 +358,6 @@ def print_training_info():
 def get_batch_data(x, y, sen_len, doc_len, word_dis, adj, emotion_pos,path, path_num, path_len,keep_prob1, keep_prob2, batch_size, test=False):
     for index in func.batch_index(len(y), batch_size, test):
         temp_path = [path[i] for i in index]
-        temp_path = tf.ragged.constant(temp_path)
-        print(temp_path.shape)
         temp_path_num = [path_num[i] for i in index]
         temp_path_len = [path_len[i] for i in index]
         feed_list = [x[index], y[index], sen_len[index], doc_len[index], word_dis[index], adj[index],emotion_pos[index],

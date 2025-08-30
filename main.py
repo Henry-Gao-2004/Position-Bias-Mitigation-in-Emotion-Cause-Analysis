@@ -278,6 +278,7 @@ def run():
                     print(len(path_data))
                     print(len(path_data[0]))
                     print(len(path_data[0][0]))
+                    print(len(path_data[0][0][0]))
                     print(len(train[7]))
                     print(len(train[7][0]))
                     print(len(train[7][0][0]))

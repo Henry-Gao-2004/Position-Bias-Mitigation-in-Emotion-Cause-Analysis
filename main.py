@@ -98,9 +98,13 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         with open('data/word2idx.txt', 'r', encoding='utf-8') as json_file: 
             word2idx = json.load(json_file)
         
-        flat = path_data_op.flatten()
-        mapped = np.array([word2idx.get(w, 0) for w in flat], dtype=np.int64) 
-        path_data_op = mapped.reshape(path_data_op.shape)
+        keys = tf.constant(list(word2idx.keys()))
+        values = tf.constant(list(word2idx.values()), dtype=tf.int64)
+        table = tf.lookup.StaticHashTable(
+            initializer=tf.lookup.KeyValueTensorInitializer(keys, values),
+            default_value=0  # OOV
+        )
+        path_data_op = table.lookup(path_data_op)
 
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
         path_inputs = tf.reshape(path_data_op, [-1, FLAGS.max_path_len, FLAGS.embedding_dim])

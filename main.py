@@ -217,7 +217,7 @@ def run():
     with tf.name_scope('train'):
         optimizer = tf.keras.optimizers.Adam(learning_rate=FLAGS.lr_main)
         gradients = tf.gradients(loss_op, tf.compat.v1.trainable_variables())
-        train_op = optimizer.apply_gradients(zip(gradients, tf.compat.v1.trainable_variables()))
+        optimizer = optimizer.apply_gradients(zip(gradients, tf.compat.v1.trainable_variables()))
     true_y_op = tf.argmax(y, 2)
     pred_y_op = tf.argmax(pred, 2)
 

@@ -165,18 +165,12 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
     pred, reg = senEncode_softmax(emotional_nodes, 'softmax_w', 'softmax_b', 2*out_units, doc_len)  # senEnc
     return pred, reg, attention, att_path
 
-import torch
+def pad3d_str_np(lst, target_shape=(64,15,7), pad_value="0"):
+    out = np.full(target_shape, pad_value, dtype=str)
 
-def pad3d(lst, target_shape=(64, 15, 7), pad_value="0"):
-    """
-    Pads/truncates a 3D nested list to target_shape with pad_value.
-    Shape = (batch, seq, length).
-    """
-    out = torch.full(target_shape, pad_value, dtype=torch.str)
-
-    for i in range(min(len(lst), target_shape[0])):            # batch dim
-        for j in range(min(len(lst[i]), target_shape[1])):     # seq dim
-            for k in range(min(len(lst[i][j]), target_shape[2])):  # length dim
+    for i in range(min(len(lst), target_shape[0])):
+        for j in range(min(len(lst[i]), target_shape[1])):
+            for k in range(min(len(lst[i][j]), target_shape[2])):
                 out[i, j, k] = lst[i][j][k]
     return out
 
@@ -289,7 +283,7 @@ def run():
                 valid_loss = []
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
-                    train[7] = pad3d(train[7])
+                    train[7] = pad3d_str_np(train[7])
                     _ = sess.run(optimizer,feed_dict=dict(zip(placeholders, train)))
                     loss = sess.run(loss_op,feed_dict=dict(zip(placeholders, train)))
                     pred_y = sess.run(pred_y_op,feed_dict=dict(zip(placeholders, train)))

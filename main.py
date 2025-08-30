@@ -306,6 +306,7 @@ def run():
 
                 '''*********Test********'''
                 test = [te_x, te_y, te_sen_len, te_doc_len, te_word_dis, te_adj_data, te_emotion_pos,te_path, te_path_num, te_path_len, 1., 1.]
+                test[7] = pad3d_str_np(test[7])
                 loss, pred_y, true_y, pred_prob, path_att_weights, path_rep_data= sess.run(
                     [loss_op, pred_y_op, true_y_op, pred, att_path, path_rep], feed_dict=dict(zip(placeholders, test)))
                 # valid_loss.append(loss)

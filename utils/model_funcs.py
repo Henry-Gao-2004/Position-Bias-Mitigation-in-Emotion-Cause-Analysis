@@ -102,9 +102,9 @@ def biLSTM(inputs, length, n_hidden, scope):
     length shape:[batch_size]
     return shape:[batch_size, max_len, n_hidden*2]
     '''
-    print(inputs.shape)
-    print(length)
-    print(n_hidden)
+    print("input shape:",inputs.shape)
+    print("length",length)
+    print("n_hidden",n_hidden)
     lstm_fw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=False)
     lstm_bw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=True)
 

@@ -103,7 +103,7 @@ def biLSTM(inputs, length, n_hidden, scope):
     return shape:[batch_size, max_len, n_hidden*2]
     '''
     print("input shape:",inputs.shape)
-    print("length",length)
+    print("length",length.shape)
     print("n_hidden",n_hidden)
     print("\n\n\n\n\n\n\n\n\n\n\n")
     lstm_layer = tf.keras.layers.Bidirectional(

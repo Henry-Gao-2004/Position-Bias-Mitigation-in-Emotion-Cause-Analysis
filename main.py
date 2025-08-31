@@ -55,6 +55,41 @@ tf.compat.v1.app.flags.DEFINE_integer('edge_type', 1, '2 for s-edge and k-edge, 
 def mask_logits(target, mask):
     return target * mask + (1 - mask) * (-1e30)
 
+def words_to_ids(words_tensor):
+    """Convert Chinese words tensor to IDs using word2idx mapping"""
+    def py_map_words(words):
+        # Convert tensor to numpy
+        words_np = words.numpy()
+        
+        # Handle different string formats
+        words_list = []
+        for word in words_np.flatten():
+            if isinstance(word, bytes):
+                # Decode bytes to string
+                word_str = word.decode('utf-8')
+            else:
+                # Already a string
+                word_str = str(word)
+            
+            # Handle Unicode escape sequences if they're literal strings
+            try:
+                # This will decode "\u4e2d" to actual Chinese characters
+                word_decoded = word_str.encode().decode('unicode_escape')
+                words_list.append(word_decoded)
+            except:
+                # If decoding fails, use the original string
+                words_list.append(word_str)
+        
+        # Map words to IDs
+        ids = [word2idx.get(word, 0) for word in words_list]  # 0 for OOV
+        
+        # Reshape to match input tensor shape
+        original_shape = words.shape
+        ids_array = tf.constant(ids, dtype=tf.int64)
+        return tf.reshape(ids_array, original_shape)
+    
+    return tf.py_function(py_map_words, [words_tensor], tf.int64)
+
 def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, pos_embedding, path_data_op, path_len_op, keep_prob1, keep_prob2, RNN = func.biLSTM):
     x = tf.nn.embedding_lookup(word_embedding, x)
     inputs = tf.reshape(x, [-1, FLAGS.max_sen_len, FLAGS.embedding_dim])
@@ -95,42 +130,8 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         
         with open('data/word2idx.txt', 'r', encoding='utf-8') as json_file: 
             word2idx = json.load(json_file)
-        def words_to_ids(words_tensor):
-            """Convert Chinese words tensor to IDs using word2idx mapping"""
-            def py_map_words(words):
-                # Convert tensor to numpy
-                words_np = words.numpy()
-                
-                # Handle different string formats
-                words_list = []
-                for word in words_np.flatten():
-                    if isinstance(word, bytes):
-                        # Decode bytes to string
-                        word_str = word.decode('utf-8')
-                    else:
-                        # Already a string
-                        word_str = str(word)
-                    
-                    # Handle Unicode escape sequences if they're literal strings
-                    try:
-                        # This will decode "\u4e2d" to actual Chinese characters
-                        word_decoded = word_str.encode().decode('unicode_escape')
-                        words_list.append(word_decoded)
-                    except:
-                        # If decoding fails, use the original string
-                        words_list.append(word_str)
-                
-                # Map words to IDs
-                ids = [word2idx.get(word, 0) for word in words_list]  # 0 for OOV
-                
-                # Reshape to match input tensor shape
-                original_shape = words.shape
-                ids_array = tf.constant(ids, dtype=tf.int64)
-                return tf.reshape(ids_array, original_shape)
-            
-            return tf.py_function(py_map_words, [words_tensor], tf.int64)
+        
         path_data_op = words_to_ids(path_data_op)
-
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)
         
         path_inputs = tf.reshape(path_data_op, [-1, FLAGS.max_path_len, FLAGS.embedding_dim])
@@ -307,6 +308,7 @@ def run():
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
                     train[7] = pad3d_str_np(train[7])
+                    train[7] = words_to_ids(train[7])
                     train[7] = tf.nn.embedding_lookup(word_embedding, train[7])
                     print(train[7])
                     # placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]

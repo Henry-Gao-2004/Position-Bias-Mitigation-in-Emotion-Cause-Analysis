@@ -56,6 +56,9 @@ def mask_logits(target, mask):
     return target * mask + (1 - mask) * (-1e30)
 
 def words_to_ids(words_tensor):
+    
+    with open('data/word2idx.txt', 'r', encoding='utf-8') as json_file: 
+        word2idx = json.load(json_file)
     """Convert Chinese words tensor to IDs using word2idx mapping"""
     def py_map_words(words):
         # Convert tensor to numpy
@@ -128,8 +131,6 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
     #path encoding ##
     with tf.name_scope('path_word_encoder'):
         
-        with open('data/word2idx.txt', 'r', encoding='utf-8') as json_file: 
-            word2idx = json.load(json_file)
         
         path_data_op = words_to_ids(path_data_op)
         path_data_op = tf.nn.embedding_lookup(word_embedding,path_data_op)

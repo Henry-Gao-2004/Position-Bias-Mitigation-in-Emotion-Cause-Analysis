@@ -35,7 +35,6 @@ def load_data(edge_type=None):
         id2word[word2idx[word]] = word
     #load paths extracted from conceptnet
     path_data = pk.load(open('path_data_1120_num15.txt', 'rb'))
-    path_data = tf.nn.embedding_lookup(embedding, path_data)
     path_num_data = pk.load(open(path + 'path_num_data.txt', 'rb'))
     path_len_data = pk.load(open(path + 'path_len_data.txt', 'rb'))
     #construct the adjacent matrix

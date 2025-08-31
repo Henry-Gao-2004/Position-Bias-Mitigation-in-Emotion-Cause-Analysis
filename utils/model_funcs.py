@@ -102,13 +102,10 @@ def biLSTM(inputs, length, n_hidden, scope):
     length shape:[batch_size]
     return shape:[batch_size, max_len, n_hidden*2]
     '''
-    outputs, state = tf.compat.v1.nn.bidirectional_dynamic_rnn(
-        cell_fw=tf.compat.v1.nn.rnn_cell.LSTMCell(n_hidden),
-        cell_bw=tf.compat.v1.nn.rnn_cell.LSTMCell(n_hidden),
-        inputs=inputs,
-        sequence_length=length,
-        dtype=tf.float32,
-        scope=scope
+    lstm_fw_cell = tf.compat.v1.nn.rnn_cell.LSTMCell(n_hidden)
+    lstm_bw_cell = tf.compat.v1.nn.rnn_cell.LSTMCell(n_hidden)
+    outputs, _ = tf.compat.v1.nn.bidirectional_dynamic_rnn(
+        lstm_fw_cell, lstm_bw_cell, inputs, sequence_length=length, dtype=tf.float32, scope=scope
     )
 
     return tf.concat(outputs, 2)

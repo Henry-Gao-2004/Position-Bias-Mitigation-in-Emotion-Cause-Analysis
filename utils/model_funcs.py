@@ -21,6 +21,7 @@ edge_type = 1
 def load_data(edge_type=None):
     #load document
     x = pk.load(open(path + 'x.txt', 'rb'))
+    print(x)
     y = pk.load(open(path + 'y.txt', 'rb'))
     sen_len = pk.load(open(path + 'sen_len.txt', 'rb'))
     doc_len = pk.load(open(path + 'doc_len.txt', 'rb'))

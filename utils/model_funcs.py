@@ -108,8 +108,9 @@ def biLSTM(inputs, length, n_hidden, scope):
     print("\n\n\n\n\n\n\n\n\n\n\n")
     lstm_fw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=False)
     lstm_bw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=True)
-    mask = tf.sequence_mask(length, maxlen=tf.shape(inputs)[1])
     outputs_fw, _, _ = lstm_fw(inputs, mask=tf.sequence_mask(length))
+    
+    mask = tf.sequence_mask(length, maxlen=tf.shape(inputs)[1])
     outputs_bw, _, _ = lstm_bw(inputs, mask=mask)
 
     outputs = (outputs_fw, outputs_bw)

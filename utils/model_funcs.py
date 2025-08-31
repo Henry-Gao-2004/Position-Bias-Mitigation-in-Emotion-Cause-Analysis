@@ -106,18 +106,17 @@ def biLSTM(inputs, length, n_hidden, scope):
     print("length",length)
     print("n_hidden",n_hidden)
     print("\n\n\n\n\n\n\n\n\n\n\n")
-    cell_fw = tf.keras.layers.LSTMCell(n_hidden)
-    cell_bw = tf.keras.layers.LSTMCell(n_hidden)
-
-    # Bidirectional dynamic RNN
-    (outputs_fw, outputs_bw), (state_fw, state_bw) = tf.compat.v1.nn.bidirectional_dynamic_rnn(
-        cell_fw=cell_fw,
-        cell_bw=cell_bw,
-        inputs=inputs,
-        sequence_length=length,
-        dtype=tf.float32,
-        scope=scope
+    lstm_layer = tf.keras.layers.Bidirectional(
+        tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True),
+        name=scope
     )
+
+    # Apply the layer
+    outputs, state_fw_h, state_fw_c, state_bw_h, state_bw_c = lstm_layer(inputs, mask=tf.sequence_mask(length))
+
+    # If you need the forward and backward outputs separately:
+    outputs_fw = outputs[:, :, :n_hidden]
+    outputs_bw = outputs[:, :, n_hidden:]
 
     # Match TF1 "outputs, state" structure
     outputs = (outputs_fw, outputs_bw)

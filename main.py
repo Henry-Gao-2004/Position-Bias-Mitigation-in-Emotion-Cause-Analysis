@@ -56,7 +56,6 @@ def mask_logits(target, mask):
     return target * mask + (1 - mask) * (-1e30)
 
 def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, pos_embedding, path_data_op, path_len_op, keep_prob1, keep_prob2, RNN = func.biLSTM):
-    print("x: ",x)
     x = tf.nn.embedding_lookup(word_embedding, x)
     inputs = tf.reshape(x, [-1, FLAGS.max_sen_len, FLAGS.embedding_dim])
     word_dis = tf.nn.embedding_lookup(pos_embedding, word_dis)
@@ -307,15 +306,11 @@ def run():
                 valid_loss = []
                 # best_pre = []
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
-                    # train[7] = pad3d_str_np(train[7])
-                    
-                    _ = sess.run(optimizer,feed_dict=dict(zip(placeholders, train)))
-                    loss = sess.run(loss_op,feed_dict=dict(zip(placeholders, train)))
-                    pred_y = sess.run(pred_y_op,feed_dict=dict(zip(placeholders, train)))
-                    true_y = sess.run(true_y_op,feed_dict=dict(zip(placeholders, train)))
-                    pred_prob = sess.run(pred,feed_dict=dict(zip(placeholders, train)))
-                    doc_len_batch = sess.run(doc_len,feed_dict=dict(zip(placeholders, train)))
-                    _ = sess.run(add_global_op,feed_dict=dict(zip(placeholders, train)))
+                    train[7] = pad3d_str_np(train[7])
+                    # placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
+                    _, loss, pred_y, true_y, pred_prob, doc_len_batch,_ = sess.run(
+                        [optimizer, loss_op, pred_y_op, true_y_op, pred, doc_len,add_global_op],
+                        feed_dict=dict(zip(placeholders, train)))
 
                     acc, p, r, f1,= func.acc_prf(pred_y, true_y, doc_len_batch)
                     train_report.append((acc, p, r, f1))

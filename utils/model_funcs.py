@@ -106,14 +106,22 @@ def biLSTM(inputs, length, n_hidden, scope):
     print("length",length)
     print("n_hidden",n_hidden)
     print("\n\n\n\n\n\n\n\n\n\n\n")
-    lstm_fw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=False)
-    lstm_bw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=True)
-    
-    outputs_fw, _, _ = lstm_fw(inputs, mask=tf.sequence_mask(length))
-    temp_mask = tf.sequence_mask(length, maxlen=tf.shape(inputs)[1])
-    outputs_bw, _, _ = lstm_bw(inputs, mask=tf.sequence_mask(length))
+    cell_fw = tf.compat.v1.nn.rnn_cell.LSTMCell(n_hidden)
+    cell_bw = tf.compat.v1.nn.rnn_cell.LSTMCell(n_hidden)
 
+    # Bidirectional dynamic RNN
+    (outputs_fw, outputs_bw), (state_fw, state_bw) = tf.compat.v1.nn.bidirectional_dynamic_rnn(
+        cell_fw=cell_fw,
+        cell_bw=cell_bw,
+        inputs=inputs,
+        sequence_length=length,
+        dtype=tf.float32,
+        scope=scope
+    )
+
+    # Match TF1 "outputs, state" structure
     outputs = (outputs_fw, outputs_bw)
+
 
     return tf.concat(outputs, 2)
 

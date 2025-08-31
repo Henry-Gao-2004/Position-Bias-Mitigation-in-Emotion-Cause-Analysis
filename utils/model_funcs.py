@@ -102,20 +102,16 @@ def biLSTM(inputs, length, n_hidden, scope):
     length shape:[batch_size]
     return shape:[batch_size, max_len, n_hidden*2]
     '''
-    lstm_layer = tf.keras.layers.Bidirectional(
-        tf.keras.layers.LSTM(
-            units=n_hidden,
-            return_sequences=True,
-            return_state=True
-        )
-    )
+    print(inputs.shape)
+    print(length)
+    print(n_hidden)
+    lstm_fw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=False)
+    lstm_bw = tf.keras.layers.LSTM(n_hidden, return_sequences=True, return_state=True, go_backwards=True)
 
-    # Apply the layer
-    # inputs: [batch, time, features]
-    # length: sequence lengths (if you want masking)
-    mask = tf.sequence_mask(length)
+    outputs_fw, _, _ = lstm_fw(inputs, mask=tf.sequence_mask(length))
+    outputs_bw, _, _ = lstm_bw(inputs, mask=tf.sequence_mask(length))
 
-    outputs, forward_h, forward_c, backward_h, backward_c = lstm_layer(inputs, mask=mask)
+    outputs = (outputs_fw, outputs_bw)
 
     return tf.concat(outputs, 2)
 

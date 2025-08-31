@@ -56,7 +56,10 @@ def mask_logits(target, mask):
     return target * mask + (1 - mask) * (-1e30)
 
 def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, pos_embedding, path_data_op, path_len_op, keep_prob1, keep_prob2, RNN = func.biLSTM):
+    print(x.shape)
     x = tf.nn.embedding_lookup(word_embedding, x)
+    print(x.shape)
+    exit()
     inputs = tf.reshape(x, [-1, FLAGS.max_sen_len, FLAGS.embedding_dim])
     word_dis = tf.nn.embedding_lookup(pos_embedding, word_dis)
     sh2 = 2 * FLAGS.n_hidden

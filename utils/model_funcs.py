@@ -106,8 +106,8 @@ def biLSTM(inputs, length, n_hidden, scope):
     print("length",length)
     print("n_hidden",n_hidden)
     print("\n\n\n\n\n\n\n\n\n\n\n")
-    cell_fw = tf.compat.v1.nn.rnn_cell.LSTMCell(n_hidden)
-    cell_bw = tf.compat.v1.nn.rnn_cell.LSTMCell(n_hidden)
+    cell_fw = tf.keras.layers.LSTMCell(n_hidden)
+    cell_bw = tf.keras.layers.LSTMCell(n_hidden)
 
     # Bidirectional dynamic RNN
     (outputs_fw, outputs_bw), (state_fw, state_bw) = tf.compat.v1.nn.bidirectional_dynamic_rnn(

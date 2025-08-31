@@ -93,7 +93,6 @@ def kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj, emotion_pos, p
         doc_rep = func.emotion_attend(senEncode, doc_len, emotion_pos,w1,w2,b1)
     #path encoding ##
     with tf.name_scope('path_word_encoder'):
-        print("path data:",path_data_op)
         
         with open('data/word2idx.txt', 'r', encoding='utf-8') as json_file: 
             word2idx = json.load(json_file)
@@ -225,9 +224,9 @@ def run():
     keep_prob2 = tf.compat.v1.placeholder(tf.float32, name = "keep_prob2")
     emotion_pos = tf.compat.v1.placeholder(tf.int32, [None], name = "emotion_pos")
     adj_tensor = tf.compat.v1.placeholder(tf.float32, [None, FLAGS.edge_type, FLAGS.max_doc_len, FLAGS.max_doc_len], name = "adj_tensor")
-    path_data_op = tf.compat.v1.placeholder(tf.string, [None, FLAGS.max_path_num, FLAGS.max_path_len], name = "path_data_op")
-    path_num_op = tf.compat.v1.placeholder(tf.int32,[None], name = "path_num_op")
-    path_len_op = tf.compat.v1.placeholder(tf.int32,[None], name = "path_len_op")
+    path_data_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num, FLAGS.max_path_len]) 
+    path_num_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len])
+    path_len_op = tf.compat.v1.placeholder(tf.int32,[None, FLAGS.max_doc_len, FLAGS.max_path_num])
     placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
     #build graph
     pred, reg, att_path, path_rep = kat_model(x, sen_len, doc_len, word_dis, word_embedding, adj_tensor,emotion_pos, pos_embedding, path_data_op,path_len_op,keep_prob1, keep_prob2)

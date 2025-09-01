@@ -64,6 +64,7 @@ print(len(path_num_list))
 
 print("Check out the path_data and the its content")
 #assert the len(path_data_list)==31296
+print(path_data_list[-1])
 print(len(path_data_list[-1]))
 print(path_num_list[-1])
 

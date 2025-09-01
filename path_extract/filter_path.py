@@ -7,6 +7,7 @@ import re
 from nltk.stem.snowball import SnowballStemmer
 import json
 import pickle5 as pickle
+import numpy as np
 
 
 stemmer = SnowballStemmer("english")
@@ -138,7 +139,7 @@ for paths in path_data_list:
     filtered_paths.append(return_top10_paths(paths))
     for line in filtered_paths[-1]:
         path_len.append(len(line))
-print(filtered_paths[-1])
+print(np.array(filtered_paths, dtype=object))
 print(len(filtered_paths),filtered_paths[0])
 with open("filtered_paths.txt", "w", encoding="utf-8") as txt_file:
     for paths in filtered_paths:

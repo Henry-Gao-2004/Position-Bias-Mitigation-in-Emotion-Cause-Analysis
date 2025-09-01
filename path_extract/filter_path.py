@@ -64,7 +64,6 @@ print(len(path_num_list))
 
 print("Check out the path_data and the its content")
 #assert the len(path_data_list)==31296
-print(path_data_list[-1])
 print(len(path_data_list[-1]))
 print(path_num_list[-1])
 
@@ -137,9 +136,9 @@ filtered_paths = []
 path_len = []
 for paths in path_data_list:
     filtered_paths.append(return_top10_paths(paths))
-    for line in return_top10_paths(paths):
+    for line in filtered_paths[-1]:
         path_len.append(len(line))
-
+print(filtered_paths[-1])
 print(len(filtered_paths),filtered_paths[0])
 with open("filtered_paths.txt", "w", encoding="utf-8") as txt_file:
     for paths in filtered_paths:

@@ -311,6 +311,7 @@ def run():
                     train[7] = pad3d_str_np(train[7])
                     train[7] = words_to_ids(train[7])
                     train[7] = tf.nn.embedding_lookup(word_embedding, train[7])
+                    train[7] = np.reshape(train[7], [-1, 75, 10, 7])
                     train[7] = sess.run(train[7]).tolist()
                     # placeholders = [x, y, sen_len, doc_len, word_dis, adj_tensor, emotion_pos,path_data_op, path_num_op, path_len_op, keep_prob1, keep_prob2]
                     _, loss, pred_y, true_y, pred_prob, doc_len_batch,_ = sess.run(

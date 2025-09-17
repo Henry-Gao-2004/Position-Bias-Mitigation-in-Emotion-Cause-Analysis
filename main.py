@@ -310,7 +310,7 @@ def run():
                 for train, _ in get_batch_data(tr_x, tr_y, tr_sen_len, tr_doc_len, tr_word_dis, tr_adj_data, tr_emotion_pos,tr_path, tr_path_num, tr_path_len, FLAGS.keep_prob1, FLAGS.keep_prob2, FLAGS.batch_size):
                     print(train[5].shape)
                     print(train[6].shape)
-                    # train[7] = pad3d_str_np(train[7])
+                    train[7] = pad3d_str_np(train[7])
                     # train[7] = words_to_ids(train[7]) #[96,10,7]
                     # train[7] = tf.reshape(train[7], [-1, 75, 10, 7])
                     # train[7] = sess.run(train[7]).tolist()
